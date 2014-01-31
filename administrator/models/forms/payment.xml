@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset>
+
+              <field name="id" type="text" default="0" label="COM_CS_PAYMENTS_FORM_LBL_PAYMENT_ID"
+            readonly="true" class="readonly"
+            description="JGLOBAL_FIELD_ID_DESC" /> 
+
+       <field name="amount" type="text" size="40" class="inputbox"
+        
+            label="COM_CS_PAYMENTS_FORM_LBL_PAYMENT_AMOUNT"
+            description="COM_CS_PAYMENTS_FORM_DESC_PAYMENT_AMOUNT" 
+         default="0" 
+        
+        
+        filter="safehtml" /> 
+
+       <field name="payment_type" type="text" size="40" class="inputbox"
+        
+            label="COM_CS_PAYMENTS_FORM_LBL_PAYMENT_PAYMENT_TYPE"
+            description="COM_CS_PAYMENTS_FORM_DESC_PAYMENT_PAYMENT_TYPE" 
+        
+        
+        
+        filter="safehtml" /> 
+
+       <field name="what" type="text"
+                
+            label="COM_CS_PAYMENTS_FORM_LBL_PAYMENT_WHAT"
+            description="COM_CS_PAYMENTS_FORM_DESC_PAYMENT_WHAT" 
+                
+                
+                 /> 
+
+       <field name="datetimestamp" type="calendar" class="inputbox"
+        
+        
+         default="0000-00-00 00:00:00" 
+        
+            label="COM_CS_PAYMENTS_FORM_LBL_PAYMENT_DATETIMESTAMP"
+            description="COM_CS_PAYMENTS_FORM_DESC_PAYMENT_DATETIMESTAMP" 
+        format="%Y-%m-%d %H:%M:%S"
+        filter="safehtml" /> 
+
+       <field name="date_paid" type="calendar" class="inputbox"
+        
+        
+         default="0000-00-00 00:00:00" 
+        
+            label="COM_CS_PAYMENTS_FORM_LBL_PAYMENT_DATE_PAID"
+            description="COM_CS_PAYMENTS_FORM_DESC_PAYMENT_DATE_PAID" 
+        format="%Y-%m-%d %H:%M:%S"
+        filter="safehtml" /> 
+
+       <field name="processed_by" type="text"
+                
+            label="COM_CS_PAYMENTS_FORM_LBL_PAYMENT_PROCESSED_BY"
+            description="COM_CS_PAYMENTS_FORM_DESC_PAYMENT_PROCESSED_BY" 
+                
+                
+                 /> 
+
+       <field name="processed_date" type="calendar" class="inputbox"
+        
+        
+         default="0000-00-00 00:00:00" 
+        
+            label="COM_CS_PAYMENTS_FORM_LBL_PAYMENT_PROCESSED_DATE"
+            description="COM_CS_PAYMENTS_FORM_DESC_PAYMENT_PROCESSED_DATE" 
+        format="%Y-%m-%d %H:%M:%S"
+        filter="safehtml" /> 
+
+       <field name="response" type="text"
+                
+            label="COM_CS_PAYMENTS_FORM_LBL_PAYMENT_RESPONSE"
+            description="COM_CS_PAYMENTS_FORM_DESC_PAYMENT_RESPONSE" 
+                
+                
+                 /> 
+
+       <field name="created_by" type="createdby" default="" 
+            label="COM_CS_PAYMENTS_FORM_LBL_PAYMENT_CREATED_BY"
+            description="COM_CS_PAYMENTS_FORM_DESC_PAYMENT_CREATED_BY"  /> 
+
+       <field name="first_name" type="text"
+                
+            label="COM_CS_PAYMENTS_FORM_LBL_PAYMENT_FIRST_NAME"
+            description="COM_CS_PAYMENTS_FORM_DESC_PAYMENT_FIRST_NAME" 
+                
+                
+                 required="true" 
+            filter="string" /> 
+
+       <field name="last_name" type="text"
+                
+            label="COM_CS_PAYMENTS_FORM_LBL_PAYMENT_LAST_NAME"
+            description="COM_CS_PAYMENTS_FORM_DESC_PAYMENT_LAST_NAME" 
+                
+                
+                 required="true" 
+            filter="string" /> 
+
+       <field name="address" type="text"
+                
+            label="COM_CS_PAYMENTS_FORM_LBL_PAYMENT_ADDRESS"
+            description="COM_CS_PAYMENTS_FORM_DESC_PAYMENT_ADDRESS" 
+                
+                
+                 required="true" 
+            filter="string" /> 
+
+       <field name="city" type="text"
+                
+            label="COM_CS_PAYMENTS_FORM_LBL_PAYMENT_CITY"
+            description="COM_CS_PAYMENTS_FORM_DESC_PAYMENT_CITY" 
+                
+                
+                 required="true" 
+            filter="string" /> 
+
+       <field name="usastate" type="usastates"
+                
+            label="COM_CS_PAYMENTS_FORM_LBL_PAYMENT_USASTATE"
+            description="COM_CS_PAYMENTS_FORM_DESC_PAYMENT_USASTATE" 
+                
+                
+                 required="true" 
+            filter="raw"
+            multiple="false">
+                <option value="">- Select State -</option>
+                <option value="state1">State1</option>
+                <option value="state2">State2</option>
+        </field> 
+
+       <field name="zipcode" type="text"
+                
+            label="COM_CS_PAYMENTS_FORM_LBL_PAYMENT_ZIPCODE"
+            description="COM_CS_PAYMENTS_FORM_DESC_PAYMENT_ZIPCODE" 
+                
+                
+                 required="true" 
+            filter="uint" /> 
+
+       <field name="phone" type="text"
+                
+            label="COM_CS_PAYMENTS_FORM_LBL_PAYMENT_PHONE"
+            description="COM_CS_PAYMENTS_FORM_DESC_PAYMENT_PHONE" 
+                
+                
+                 required="true" 
+            filter="tel" /> 
+
+       <field name="phone_type" type="radio"
+                
+            label="COM_CS_PAYMENTS_FORM_LBL_PAYMENT_PHONE_TYPE"
+            description="COM_CS_PAYMENTS_FORM_DESC_PAYMENT_PHONE_TYPE" 
+                
+                
+                 required="true" 
+            filter="raw">
+                <option value="home">Home</option>
+                <option value="work">Work</option>
+                <option value="cell">Cell</option>
+        </field> 
+
+ 
+		<field name="email" type="email" label="Email" description="" validate="email"  required="true" /> 
+
+       <field name="payment_reason" type="list"
+                
+            label="COM_CS_PAYMENTS_FORM_LBL_PAYMENT_PAYMENT_REASON"
+            description="COM_CS_PAYMENTS_FORM_DESC_PAYMENT_PAYMENT_REASON" 
+                
+                
+                 required="true" 
+            filter="raw"
+            multiple="false">
+                <option value="">- Select Type -</option>
+                <option value="reason1">Reason1</option>
+                <option value="reason2">Reason2</option>
+        </field> 
+
+       <field name="source" type="list"
+                
+            label="COM_CS_PAYMENTS_FORM_LBL_PAYMENT_SOURCE"
+            description="COM_CS_PAYMENTS_FORM_DESC_PAYMENT_SOURCE" 
+                
+                
+                 required="true" 
+            filter="raw"
+            multiple="false">
+                <option value="">- Select Source -</option>
+                <option value="source1">Source1</option>
+                <option value="source2">Source2</option>
+        </field>
+
+	</fieldset>
+
+</form>

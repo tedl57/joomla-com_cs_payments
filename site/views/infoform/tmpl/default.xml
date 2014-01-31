@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+    <layout title="COM_CS_PAYMENTS_TITLE_FORM_VIEW_PAYMENT" option="View">
+        <message>
+                        <![CDATA[COM_CS_PAYMENTS_TITLE_FORM_VIEW_PAYMENT_DESC]]>
+        </message>
+    </layout>
+    
+    		<!-- Add fields to the request variables for the layout. -->
+	<fields name="request">
+		<fieldset name="request">
+
+			<field 
+				name="reason" 
+				type="list" 				
+				label="Payment Reason"
+				description="Select the reason for this payment."
+				default=""
+				>
+					<option value="join">Join</option>
+					<option value="renew">Renew</option>
+					<option value="donate">Donate</option>
+			</field>
+			
+		</fieldset>
+	</fields>
+	
+    <fields name="params">
+        <fieldset 
+            name="basic"
+            label="COM_CS_PAYMENTS_FIELDSET_ITEM_ID_SELECT_LABEL">
+            <field
+                name="item_id"
+                query="SELECT 0 as `id` UNION SELECT `id` FROM #__cs_payments ORDER BY `id`"
+                type="sql"
+                key_field="id" 
+                value_field="id"
+                label="COM_CS_PAYMENTS_ITEM_ID_SELECT_LABEL_FORM"
+                require="true"
+                description="JGLOBAL_SHOW_TITLE_DESC">
+            </field>
+        </fieldset>
+    </fields>
+</metadata>

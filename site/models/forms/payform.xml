@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form>
+       <fieldset name="member_info" label="Enter Credit Card Information" addfieldpath="/components/com_cs_payments/models/fields">
+           <field
+                    type="text"
+                    name="card_first_name"
+                    id="card_first_name"
+                    label="First Name on Card"
+                    description="Cardholder's first name"
+                    required="true"
+                    maxLength="50" />
+        
+		<field
+                    type="text"
+                    name="card_last_name"
+                    id="card_last_name"
+                    label="Last Name on Card"
+                    description="Cardholder's last name"
+                    required="true"
+                    maxLength="50" />
+
+		<field
+                    type="text"
+                    name="cardno"
+                    id="cardno"
+                    label="Card Number"
+                    description="Credit card number.  Visa, MasterCard and Discover cards are accepted."
+                    required="true"
+                    hint="Visa, MasterCard or Discover"
+                    maxLength="20" />
+		<field
+                    type="list"
+                    name="cardexpmonth"
+                    id="cardexpmonth"
+                    label="Expiration Month"
+                    required="true"
+                    description="Expiration month of card.">
+               	<option value="">COM_CS_PAYMENTS_OPTION_SELECT</option>     
+                <option value="01">01</option>
+                <option value="02">02</option>
+                <option value="03">03</option>
+                <option value="04">04</option>
+                <option value="05">05</option>
+                <option value="06">06</option>
+                <option value="07">07</option>
+                <option value="08">08</option>
+                <option value="09">09</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+		</field>
+		<field
+                    type="creditcardexpirationyears"
+                    name="cardexpyear"
+                    id="cardexpyear"
+                    label="Expiration Year"
+                    required="true"
+                    description="Expiration year of card.">
+               	<option value="">COM_CS_PAYMENTS_OPTION_SELECT</option> 
+		</field> 
+  		<field name="cardccv" type="text"
+  			      label="CCV"
+  			      description="3 or 4 digit Credit Card Verification number on back of card."
+  			      hint="3 or 4 digit number on back of card"
+  			      required="true"/>
+        
+        </fieldset>
+</form>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form>
+       <fieldset name="member_info" label="Enter Member Information" addfieldpath="/components/com_cs_payments/models/fields">
+	    <field
+                    type="text"
+                    name="first_name"
+                    id="first_name"
+                    label="First Name"
+                    description="Your first name"
+                    required="true"
+                    OLDclass="validate"
+                    maxLength="50" />
+        
+		<field
+                    type="text"
+                    name="last_name"
+                    id="last_name"
+                    label="Last Name"
+                    description="Your last name"
+                    required="true"
+                    OLDclass="validate"
+                    maxLength="50" />
+
+		<field
+                    type="text"
+                    name="phone"
+                    id="phone"
+                    label="Phone"
+                    description="Your telephone number"
+                    required="true"
+                    hint="123-456-7890"
+                    maxLength="16" />
+             <field
+                    type="list"
+                    name="phone_type"
+                    id="phone_type"
+                    label="Phone Type"
+                    required="true"
+                    description="Location of your telephone number">
+               	<option value="">COM_CS_PAYMENTS_OPTION_SELECT</option>     
+                <option value="Home">Home</option>
+                <option value="Work">Work</option>
+                <option value="Cell">Cell</option>
+                <option value="Other">Other</option>
+            </field>
+ 
+  <field name="email" type="email"
+  			      label="JGLOBAL_EMAIL"
+  			      description="Your email address"
+  			      required="true"/>
+        
+        </fieldset>
+        <fieldset name="payment_reason" label="Choose Preferred Renewal Type">
+                  <field name="payment_reason" type="membershiptypes" label="Type" required="true"
+                  description="Select a renewal type"
+                  >
+           			<option value="">COM_CS_PAYMENTS_OPTION_SELECT</option>
+           			</field>
+        
+        </fieldset>
+      
+</form>

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form>
+       <fieldset name="member_info" label="Enter Member Information" addfieldpath="/components/com_cs_payments/models/fields">
+ 		<field
+                    type="text"
+                    name="first_name"
+                    id="first_name"
+                    label="First Name"
+                    description="Your first name"
+                    required="true"
+                    OLDclass="validate"
+                    maxLength="50" />
+        
+		<field
+                    type="text"
+                    name="last_name"
+                    id="last_name"
+                    label="Last Name"
+                    description="Your last name"
+                    required="true"
+                    OLDclass="validate"
+                    maxLength="50" />
+		<field
+                    type="text"
+                    name="address"
+                    id="address"
+                    label="Address"
+                    description="Your postal address"
+                    required="true"
+                    OLDclass="validate"
+                    maxLength="100" />
+		<field
+                    type="text"
+                    name="city"
+                    id="city"
+                    label="City"
+                    description="Your city"
+                    required="true"
+                    OLDclass="validate"
+                    maxLength="100" />
+     
+		<field name="usastate" type="usastates" label="State" required="true"
+					description="Your state"
+		>
+      		<option value="">COM_CS_PAYMENTS_OPTION_SELECT</option>
+		</field>
+        
+        <field
+                    type="text"
+                    name="zipcode"
+                    id="zipcode"
+                    label="Zipcode"
+                    description="Your 5 digit zipcode"
+                    required="true"
+                    OLDclass="validate-numeric"
+                    OLDvalidate="numeric"
+                    hint="12345"
+                    minLength="5"
+                    maxLength="5" />
+      
+		<field
+                    type="text"
+                    name="phone"
+                    id="phone"
+                    label="Phone"
+                    description="Your telephone number"
+                    required="true"
+                    hint="123-456-7890"
+                    maxLength="16" />
+            <field
+                    type="list"
+                    name="phone_type"
+                    id="phone_type"
+                    label="Phone Type"
+                    required="true"
+                    description="Location of your telephone number">
+               	<option value="">COM_CS_PAYMENTS_OPTION_SELECT</option>     
+                <option value="Home">Home</option>
+                <option value="Work">Work</option>
+                <option value="Cell">Cell</option>
+                <option value="Other">Other</option>
+            </field>
+          
+  <field name="email" type="email"
+  			      label="JGLOBAL_EMAIL"
+  			      description="Your email address"
+  			      required="true"/>
+
+  <field name="birthdate" type="text"
+  			      label="Birthdate"
+  			      description="Your birthdate"
+  			      hint="yyyy-mm-dd"
+  			      required="true"/>
+        
+            <field
+                    type="list"
+                    name="gender"
+                    id="gender"
+                    label="Gender"
+                    required="true"
+                    description="Your gender">
+               	<option value="">COM_CS_PAYMENTS_OPTION_SELECT</option>     
+                <option value="Female">Female</option>
+                <option value="Male">Male</option>
+                <option value="Not Specified">Not Specified</option>
+            </field>
+           <field
+                    type="list"
+                    name="lang_pref"
+                    id="lang_pref"
+                    label="Preferred Language"
+                    description="Your gender">    
+                <option value="English">English</option>
+                <option value="Spanish">Spanish</option>
+            </field>
+          
+        </fieldset>
+        <fieldset name="payment_reason" label="Choose Preferred Membership Type">
+                  <field name="payment_reason" type="membershiptypes" label="Membership Type" required="true"
+                  description="Select a membership type"
+                  >
+           			<option value="">COM_CS_PAYMENTS_OPTION_SELECT</option>
+           			</field>
+        
+        </fieldset>
+        <fieldset name="newsletter_distribution" label="Choose Preferred Newsletter Distribution Type">
+                  <field name="newsletter_distribution" type="newsletterdistributiontypes" label="Distribution Type"
+                  description="Select a newsletter distribution type">
+           			</field>
+        </fieldset>
+        <fieldset name="source" label="How did you hear about us?">
+                  <field name="source" type="sql" query="SELECT id, source FROM #__cs_sources ORDER BY source" key_field="source" value_field="source" label="Source" required="true"
+                  
+        			description="Please select where you heard about us"
+        			>
+           			<option value="">COM_CS_PAYMENTS_OPTION_SELECT</option>
+           			</field>
+        
+        </fieldset>
+</form>

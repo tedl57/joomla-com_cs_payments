@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form>
+       <fieldset name="member_info" label="%person% Information">
+ 			<field
+                    type="echovalue"
+                    name="person_info"
+                    default="person_info"/>        
+        </fieldset>
+        <fieldset name="reason_info" label="%reason% Information">
+            <field
+                    type="echovalue"
+                    name="reason_info"
+                    default="reason_info"/>                
+            <field
+                    type="echovalue"
+                    name="confirm_msg"
+                    default="confirm_msg"/>        
+        </fieldset>
+</form>

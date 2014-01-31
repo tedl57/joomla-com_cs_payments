@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form>
+       <fieldset name="donor_info" label="Enter Donor Information" addfieldpath="/components/com_cs_payments/models/fields">
+            <field
+                    type="text"
+                    name="first_name"
+                    id="first_name"
+                    label="First Name"
+                    description="Your first name"
+                    required="true"
+                    maxLength="50" /> 
+		<field
+                    type="text"
+                    name="last_name"
+                    id="last_name"
+                    label="Last Name"
+                    description="Your last name"
+                    required="true"
+                    maxLength="50" />
+		<field
+                    type="text"
+                    name="address"
+                    id="address"
+                    label="Address"
+                    description="Your postal address"
+                    required="true"
+                    maxLength="100" />
+		<field
+                    type="text"
+                    name="city"
+                    id="city"
+                    label="City"
+                    description="Your city"
+                    required="true"
+                    maxLength="100" />
+     
+		<field name="usastate" type="usastates" label="State" required="true"
+					description="Your state"
+		>
+      		<option value="">COM_CS_PAYMENTS_OPTION_SELECT</option>
+		</field>
+        
+        <field
+                    type="text"
+                    name="zipcode"
+                    id="zipcode"
+                    label="Zipcode"
+                    description="Your 5 digit zipcode"
+                    required="true"
+                    hint="12345"
+                    minLength="5"
+                    maxLength="5" />
+      
+		<field
+                    type="text"
+                    name="phone"
+                    id="phone"
+                    label="Phone"
+                    description="Your telephone number"
+                    required="true"
+                    hint="123-456-7890"
+                    maxLength="16" />
+            <field
+                    type="list"
+                    name="phone_type"
+                    id="phone_type"
+                    label="Phone Type"
+                    required="true"
+                    description="Location of your telephone number">
+               	<option value="">COM_CS_PAYMENTS_OPTION_SELECT</option>     
+                <option value="Home">Home</option>
+                <option value="Work">Work</option>
+                <option value="Cell">Cell</option>
+                <option value="Other">Other</option>
+            </field>
+          
+  <field name="email" type="email"
+  			      label="JGLOBAL_EMAIL"
+  			      description="Your email address"
+  			      required="true"/>
+        
+        </fieldset>
+        <fieldset name="payment_reason" label="Choose Preferred Donation Fund">
+                  <field name="payment_reason" type="sql" 
+            	      query="SELECT iname FROM #__cs_donation_funds ORDER BY iname" key_field="iname" value_field="iname" 
+                	  label="Donation Fund" required="true"
+         			  description="Select a donation fund"            
+                  >
+           			<option value="">COM_CS_PAYMENTS_OPTION_SELECT</option>
+           			</field>
+  <!--       -->        
+        </fieldset>
+
+         <fieldset name="amount" label="Choose Donation Amount">
+        
+			<field
+                    type="donationamounts"
+                    name="amount"
+                    id="amount"
+                    label="Donation Amount"
+                    required="true"
+                    description="Select a donation amount">
+			</field>
+            <field
+                    type="text"
+                    name="otheramount"
+                    id="otheramount"
+                    label="Other Amount"
+                    description="Enter an other donation amount"
+                    maxLength="16" />
+   
+        </fieldset>
+        
+</form>

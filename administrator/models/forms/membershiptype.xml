@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset>
+
+       <field name="id" type="text" default="0" label="COM_CS_PAYMENTS_FORM_LBL_PAYMENT_ID"
+            readonly="true" class="readonly"
+            description="JGLOBAL_FIELD_ID_DESC" /> 
+       <field name="typ" type="text" size="40" class="inputbox"
+       		label="COM_CS_PAYMENTS_FORM_LBL_MEMBERSHIP_TYPE"
+            description="COM_CS_PAYMENTS_FORM_DESC_MEMBERSHIP_TYPE" required="true"
+         	filter="safehtml" />
+       <field name="dues" type="text" size="40" class="inputbox"  
+            label="COM_CS_PAYMENTS_FORM_LBL_DUES"
+            description="COM_CS_PAYMENTS_FORM_DESC_DUES" required="true"
+        	filter="safehtml" />
+       <field name="show_order" type="text"
+            label="COM_CS_PAYMENTS_FORM_LBL_SHOW_ORDER"
+            description="COM_CS_PAYMENTS_FORM_DESC_SHOW_ORDER" /> 
+       <field name="lifetime_membership" type="text"
+            label="COM_CS_PAYMENTS_FORM_LBL_LIFETIME_MEMBERSHIP"
+            description="COM_CS_PAYMENTS_FORM_DESC_LIFETIME_MEMBERSHIP" default="0" /> 
+       <field name="age_max" type="text"
+            label="COM_CS_PAYMENTS_FORM_LBL_AGE_MAX"
+            description="COM_CS_PAYMENTS_FORM_DESC_AGE_MAX" default="0" />
+       <field name="age_min" type="text"
+            label="COM_CS_PAYMENTS_FORM_LBL_AGE_MIN"
+            description="COM_CS_PAYMENTS_FORM_DESC_AGE_MIN" default="0" /> 
+
+	</fieldset>
+
+</form>

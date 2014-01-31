@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+	<fieldset name="component"
+		label="Organization Details"
+		svlabel="COM_CS_PAYMENTS_COMPONENT_LABEL"
+		svdescription="COM_CS_PAYMENTS_COMPONENT_DESC"
+	>      		
+			<field
+				name="org_name"
+				type="text"
+				label="Organization Name"
+				hint="Acme, Inc."
+				description="Enter the organization's name."
+			/>
+
+         <field
+			name="org_name_prefix_with_the"
+			type="radio"
+			class="btn-group btn-group-yesno"
+			default="1"
+			label="Prefix Organization Name With The"
+			description="Prefix the Organization's Name with The ?">
+			<option
+				value="0">No</option>
+			<option
+				value="1">Yes</option>
+		</field>
+			<field
+				name="org_name_abbr"
+				type="text"
+				label="Abbreviated Organization Name"
+				description="Enter the organization's abbreviated name."
+				hint="AI"
+			/>
+			<field
+				name="org_address"
+				type="text"
+				label="Organization Address"
+				description="Enter the organization's postal address."
+				hint="123 Main St"
+			/>
+			<field
+				name="org_city"
+				type="text"
+				label="Organization City"
+				description="Enter the organization's postal city."
+				hint="Bolgerton"
+			/>
+			<field
+				name="org_state"
+				type="text"
+				label="Organization State"
+				description="Enter the organization's postal state."
+				hint="Illinois"
+			/>
+			<field
+				name="org_state_abbr"
+				type="text"
+				label="Organization State Abbreviation"
+				description="Enter the organization's postal state abbreviation."
+				hint="IL"
+			/>
+			<field
+				name="org_zipcode"
+				type="text"
+				filter="integer"
+				label="Organization Zipcode"
+				description="Enter a 5 digit zipcode."
+				hint="12345"
+			/>
+        	<field
+				name="org_web_address"
+				type="text"
+				label="Organization Website"
+				description="Enter website address."
+				hint="www.acme.com"
+			/>
+        	<field
+				name="org_contact_email_address"
+				type="text"
+				label="Organization Contact Email Address"
+				description="Enter the organization's contact email address."
+				hint="contact@acme.com"
+			/>
+        	<field
+				name="org_membership_email_address"
+				type="text"
+				label="Organization Membership Email Address"
+				description="Enter the organization's membership email address."
+				hint="membership@acme.com"
+			/>
+        	<field
+				name="org_accounting_email_address"
+				type="text"
+				label="Organization Accounting Email Address"
+				description="Enter the organization's accounting email address."
+				hint="accounting@acme.com"
+			/>
+         
+	</fieldset>
+	<fieldset name="component2"
+		label="Features"
+	>      		
+        	<field
+				name="header_msg"
+				type="text"
+				label="Header Message (optional)"
+				description="Enter a message displayed on top of the form."
+				hint="Thank you for your support!"
+			/>
+ 	       	<field
+				name="footer_msg"
+				type="text"
+				label="Footer Message (optional)"
+				description="Enter a message displayed on the bottom of the form."
+				hint="You can trust..."
+			/>
+			<field
+				name="birthdate_required"
+				type="radio"
+				class="btn-group btn-group-yesno"
+				default="1"
+				label="Joining Requires Birthdate"
+				description="Should Birthdate be required on the Join form?">
+					<option	value="0">No</option>
+					<option	value="1">Yes</option>
+			</field>
+ 	       	<field
+				name="join_age_min"
+				type="text"
+				label="Minimum Age to Join (optional)"
+				description="Enter the minimum age a person must be to join."
+				hint="Leave blank for no minimum age"
+			/>
+			<field
+				name="gender_required"
+				type="radio"
+				class="btn-group btn-group-yesno"
+				default="1"
+				label="Joining Requires Gender"
+				description="Should Gender be required on the Join form?">
+					<option	value="0">No</option>
+					<option	value="1">Yes</option>
+			</field>
+			<field
+				name="language_required"
+				type="radio"
+				class="btn-group btn-group-yesno"
+				default="1"
+				label="Joining Requires Language"
+				description="Should Preferred Language be required on the Join form?">
+					<option	value="0">No</option>
+					<option	value="1">Yes</option>
+			</field>
+			<field
+				name="source_required"
+				type="radio"
+				class="btn-group btn-group-yesno"
+				default="1"
+				label="Joining Requires Source"
+				description="Should 'How did you hear about us?' be required on the Join form?">
+					<option	value="0">No</option>
+					<option	value="1">Yes</option>
+			</field>
+			<field
+				name="newsletter_distribution_types"
+				type="text"
+				label="Newsletter Distribution Types (optional)"
+				description="Comma separated list of types."
+				hint="Leave blank to disable">
+			</field>
+			<field
+				name="donation_fund_required"
+				type="radio"
+				class="btn-group btn-group-yesno"
+				default="1"
+				label="Donating Requires Fund"
+				description="Should Donation Fund be required on the Donate form?">
+					<option	value="0">No</option>
+					<option	value="1">Yes</option>
+			</field>
+			<field
+				name="donation_amounts"
+				type="text"
+				label="Donation Amounts (optional)"
+				description="Comma separated list of amounts."
+				hint="10,25,50,100,250,500 (default)"
+			/>
+				<field
+				name="donation_amount_default"
+				type="text"
+				label="Default Donation Amount (optional)"
+				description="Enter an amount."
+				hint="100 (default)"
+			/>
+	</fieldset>
+	<fieldset name="component3"
+		label="authorize.net"
+	>      		
+        	<field
+				name="authorizedotnet_login_id"
+				type="text"
+				label="Organization authorize.net Login ID"
+				description="Enter the organization's authorize.net login id."
+			/>
+        	<field
+				name="authorizedotnet_transaction_key"
+				type="text"
+				label="Organization authorize.net Transaction Key"
+				description="Enter the organization's authorize.net transaction key."
+			/>
+	
+	</fieldset>
+	<fieldset name="component4"
+		label="PayPal"
+	>      		
+        	<field
+				name="org_paypal_email_address"
+				type="text"
+				label="Organization Paypal Email Address"
+				description="Enter the organization's paypal email address."
+			/>
+	
+	</fieldset>
+	<fieldset name="permissions"
+		description="JCONFIG_PERMISSIONS_DESC"
+		label="JCONFIG_PERMISSIONS_LABEL"
+	>
+
+		<field 
+            name="rules" 
+            type="rules"
+			component="com_cs_payments"
+            class="inputbox"
+			filter="rules"
+			validate="rules"
+			label="JCONFIG_PERMISSIONS_LABEL"
+			section="component" />
+	</fieldset>
+
+</config>
+<!--
+########################################################################################
+The following are a list of all the different types of fields you can add to this file
+They are here for copy pasting - neat eh?
+########################################################################################
+
+http://docs.joomla.org/Calendar_parameter_type
+<field name="mycalendar" type="calendar" default="5-10-2008" label="Select a date" description="" format="%d-%m-%Y" />
+
+http://docs.joomla.org/Category_parameter_type
+<field name="mycategory" type="category" label="Select a category" description="" section="3" />
+
+http://docs.joomla.org/Editors_parameter_type
+<field name="myeditor" type="editors" default="none" label="Select an editor" />
+
+http://docs.joomla.org/Filelist_parameter_type
+<field name="myfile" type="filelist" default="" label="Select a file" description="" directory="administrator" filter="" exclude="" stripext="" />
+
+http://docs.joomla.org/Folderlist_parameter_type
+<field name="myfolder" type="folderlist" default="" label="Select a folder" directory="administrator" filter="" exclude="" stripext="" />
+
+http://docs.joomla.org/Helpsites_parameter_type
+<field name="myhelpsite" type="helpsites" default="" label="Select a help site" description="" />
+
+http://docs.joomla.org/Hidden_parameter_type
+<field name="mysecretvariable" type="hidden" default="" />
+
+http://docs.joomla.org/Imagelist_parameter_type
+<field name="myimage" type="imagelist" default="" label="Select an image" description="" directory="" exclude="" stripext="" />
+
+http://docs.joomla.org/Languages_parameter_type
+<field name="mylanguage" type="languages" client="site" default="en-GB" label="Select a language" description="" />
+
+http://docs.joomla.org/List_parameter_type
+<field name="mylistvalue" type="list" default="" label="Select an option" description="">
+  <option value="0">Option 1</option>
+  <option value="1">Option 2</option>
+</field>
+
+http://docs.joomla.org/Menu_parameter_type
+<field name="mymenu" type="menu" default="mainmenu" label="Select a menu" description="Select a menu" />
+
+http://docs.joomla.org/Menuitem_parameter_type
+<field name="mymenuitem" type="menuitem" default="45" label="Select a menu item" description="Select a menu item" />
+
+http://docs.joomla.org/Password_parameter_type
+<field name="mypassword" type="password" default="secret" label="Enter a password" description="" size="5" />
+
+http://docs.joomla.org/Radio_parameter_type
+<field name="myradiovalue" type="radio" default="0" label="Select an option" description="">
+  <option value="0">1</option>
+  <option value="1">2</option>
+</field>
+
+http://docs.joomla.org/Spacer_parameter_type
+<field type="spacer" default="&lt;b&gt;Advanced parameters&lt;/b&gt;" />
+
+http://docs.joomla.org/Sql_parameter_type
+<field name="myfield" type="sql" default="10" label="Select an article" query="SELECT id, title FROM #__content" key_field=”id” value_field=”title” />
+
+http://docs.joomla.org/Text_parameter_type
+<field name="mytextvalue" type="text" default="Some text" label="Enter some text" description="" size="10" />
+
+http://docs.joomla.org/Textarea_parameter_type
+<field name="mytextarea" type="textarea" default="default" label="Enter some text" description="" rows="10" cols="5" />
+
+http://docs.joomla.org/Timezones_parameter_type
+<field name="mytimezone" type="timezones" default="-10" label="Select a timezone" description="" />
+
+http://docs.joomla.org/Usergroup_parameter_type
+<field name="myusergroups" type="usergroup" default="" label="Select a user group" description="" />
+
+
+ -->

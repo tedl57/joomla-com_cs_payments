@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset>
+
+              <field name="id" type="text" default="0" label="COM_CS_PAYMENTS_FORM_LBL_PAYMENT_ID"
+            readonly="true" class="readonly"
+            description="JGLOBAL_FIELD_ID_DESC" /> 
+
+       <field name="iname" type="text" size="40" class="inputbox"
+        
+            label="COM_CS_PAYMENTS_FORM_LBL_DONATION_FUND"
+            description="COM_CS_PAYMENTS_FORM_DESC_DONATION_FUND" 
+                
+        filter="safehtml" /> 
+
+	</fieldset>
+
+</form>
