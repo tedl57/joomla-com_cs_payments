@@ -51,7 +51,7 @@
 				type="text"
 				label="Organization State"
 				description="Enter the organization's postal state."
-				hint="Illinois"
+				hint="Laydenstate"
 			/>
 			<field
 				name="org_state_abbr"
