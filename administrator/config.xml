@@ -1,3 +1,4 @@
+
 <?xml version="1.0" encoding="utf-8"?>
 <config>
 	<fieldset name="component"
@@ -51,7 +52,7 @@
 				type="text"
 				label="Organization State"
 				description="Enter the organization's postal state."
-				hint="Laydenstate"
+				hint="Illinois"
 			/>
 			<field
 				name="org_state_abbr"
