@@ -7,7 +7,7 @@ It collects a person's information and preferred payment reason and then uses ei
 Installation and Setup
 ===
 1. On github (https://github.com/tedl57/joomla-com_cs_payments):
- * Download ZIP to local computer
+ * Download latest RELEASES/ .zip file to local computer
 
 2. In Joomla 3.x Administrator:
  * Use Extension Manager to install the ZIP
