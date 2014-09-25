@@ -33,7 +33,7 @@ class Cs_paymentsPayprocActionConv15tbl extends Cs_paymentsPayprocAction
 		{
 			$id=$obj->id;
 			$amount=$obj->amount;
-			$payment_type = $obj->payment_reason == "r" ? "reason " : $obj->payment_reason == "j" ? "join" : "donate";
+			$payment_type = $obj->payment_reason == "r" ? "renew " : $obj->payment_reason == "j" ? "join" : "donate";
 			$payment_reason = $obj->what;
 			$processed_by = $obj->processed_by;
 			$response= $obj->response;
@@ -55,8 +55,9 @@ $date_paid= $obj->date_paid == NULL ? "NULL" : "'$obj->date_paid'";
 			$source= $db->escape($obj->source);
 			$gender= $obj->gender;
 			$lang_pref= $obj->language;
+			$birthdate= $obj->bday;
 
-			$sql = "INSERT INTO `joomla3`.`$tbl_out` (`id`, `amount`, `payment_type`, `payment_reason`, `datetimestamp`, `date_paid`, `processed_by`, `processed_date`, `response`, `created_by`, `first_name`, `last_name`, `address`, `city`, `usastate`, `zipcode`, `phone`, `phone_type`, `email`, `source`, `gender`, `lang_pref`) VALUES ($id, '$amount', '$payment_type', '$payment_reason', '$datetimestamp', $date_paid, '$processed_by', $processed_date, '$response', 'created_by', '$first_name', '$last_name', '$address', '$city', '$usastate', '$zipcode', '$phone', '$phone_type', '$email', '$source', '$gender', '$lang_pref');";
+			$sql = "INSERT INTO `joomla3`.`$tbl_out` (`id`, `amount`, `payment_type`, `payment_reason`, `datetimestamp`, `date_paid`, `processed_by`, `processed_date`, `response`, `created_by`, `first_name`, `last_name`, `address`, `city`, `usastate`, `zipcode`, `phone`, `phone_type`, `email`, `source`, `gender`, `lang_pref`, `birthdate`) VALUES ($id, '$amount', '$payment_type', '$payment_reason', '$datetimestamp', $date_paid, '$processed_by', $processed_date, '$response', 'created_by', '$first_name', '$last_name', '$address', '$city', '$usastate', '$zipcode', '$phone', '$phone_type', '$email', '$source', '$gender', '$lang_pref', '$birthdate');";
 //echo "$sql<br />";
 			$db->setQuery($sql);
 			$db->execute();
