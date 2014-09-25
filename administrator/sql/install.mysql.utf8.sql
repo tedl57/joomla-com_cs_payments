@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS `#__cs_payments` (
 `source` VARCHAR(255)  NOT NULL ,
 `gender` VARCHAR(32)  NOT NULL ,
 `lang_pref` VARCHAR(32)  NOT NULL ,
+`birthdate` VARCHAR(32)  NOT NULL ,
 PRIMARY KEY (`id`)
 ) DEFAULT COLLATE=utf8_general_ci;
 
