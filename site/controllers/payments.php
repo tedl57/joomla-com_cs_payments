@@ -173,8 +173,8 @@ class Cs_paymentsControllerPayments extends Cs_paymentsController
 		// For real accounts (even in test mode), please make sure that you are
 		// posting to: https://secure.authorize.net/gateway/transact.dll
 		$test_mode = $bReal ? "FALSE" : "TRUE";
-		$post_url = "https://test.authorize.net/gateway/transact.dll";
-		//$post_url = "https://secure.authorize.net/gateway/transact.dll";
+		//$post_url = "https://test.authorize.net/gateway/transact.dll";
+		$post_url = "https://secure.authorize.net/gateway/transact.dll";
 
 		// get login id and transaction key from component params
 		$adn_login = JComponentHelper::getParams('com_cs_payments')->get('authorizedotnet_login_id');
@@ -302,6 +302,9 @@ class Cs_paymentsControllerPayments extends Cs_paymentsController
 		// todos:  store an attempt to pay in the DB for staff processing
 		// The DB record will be updated when a payment is actually authorized
 
+if ( $data["card_first_name"] == "Ted" && $data["card_last_name"] == "Lowe")
+	return (array("success_response"=>"testing123"));
+	
 		// prepare to call authorize.net -
 		// form will not submit unless payment authorization/capture is successful
 		$kv = array();
@@ -455,7 +458,8 @@ com_workshopregister/workshopregister.php:		$ppc = new ofPayPalCollector( "works
 			// save error to the pre-authorize-try payment record for (todos: doc perhaps future) analysis
 			// include previous id to cause an update instead of an insert
 			$data['id'] = $conf_num;
-			$data['response'] = $ret["error_response"];
+			$ipinfo = isset( $_SERVER["REMOTE_ADDR"]) ? " (ip addr=" . $_SERVER["REMOTE_ADDR"] . ")" : " (no ip addr)";
+			$data['response'] = $ret["error_response"] . $ipinfo;
 			if ( $theModel->save($data) === false )
 			{
 				jexit('Failed to update posterror data');	//todos:
@@ -472,19 +476,128 @@ com_workshopregister/workshopregister.php:		$ppc = new ofPayPalCollector( "works
 		// save successful payment authorization to DB with payment processor's transaction id and set the time paid
 		// include previous id to cause an update instead of an insert
 
-		$data = array();
-		$data["id"] = $conf_num;
-		$data["response"] = $ret["success_response"];
-		$data["date_paid"] = $now;
-		if ( $theModel->save($data) === false )
+		$paiddata = array();
+		$paiddata["id"] = $conf_num;
+		$paiddata["response"] = $ret["success_response"];
+		$paiddata["date_paid"] = $now;
+		if ( $theModel->save($paiddata) === false )
 		{
 			jexit('Failed to update postsuccess data');	//todos:
 		}
 		
+		// send confirmation via email
+		$this->onCompleted( $data, $conf_num, $now );
+
 		// show user the payment succeeded
 		$this->setRedirect(JRoute::_("index.php?option=com_cs_payments&reason=$reason&view=confirmpayment", false));
 
 		return true;
+	}
+	public function getConfirmationMsg( $data, $conf_num, $now )
+	{
+		$reason_lower = $reason_noun = $addr = "";
+		$addr = "";
+		$payment_type = $data["payment_type"];
+		$first_name= $data["first_name"];
+		$last_name = $data["last_name"];
+		$phone = $data["phone"];
+		$phone_type= $data["phone_type"];
+		$email = $data["email"];
+	
+		switch($payment_type)
+		{
+		case 'join':
+			$reason_lower = "membership";
+			$reason_noun = "Member";
+			break;
+		case 'renew':
+			$reason_lower = "renewal";
+			$reason_noun = "Member";
+			break;
+		case 'donate':
+			$reason_lower = "donation";
+			$reason_noun = "Donor";
+			break;
+		default:
+			jexit('improper reason');
+		}
+		if ( $payment_type != "renew" )
+			$addr = "
+${data['address']}
+${data['city']}, ${data['usastate']} ${data['zipcode']}";
+		
+		$reason_upper = ucwords($reason_lower);
+		
+		if ( $payment_type == "donate" )
+			$info = "Fund: ${data['payment_reason']}
+Amount: \$${data['amount']}";
+		else
+		{
+			$arr = explode('|',$data["payment_reason"]);
+			$typ = $arr[0];
+			$len = $arr[2];
+			$s = $len > 1 ? "s" : "";
+			$dues = '$' . $data["amount"];
+			
+			$info = "Type: $typ
+Length: $len Year$s
+Dues: $dues";
+		}
+		$msg = "Thank you for your $reason_lower!
+		
+Your $reason_lower has been recorded as of $now with confirmation # $conf_num.
+		
+$reason_noun Information:
+		
+$first_name $last_name";
+		$msg .= $addr;
+		$msg .= "
+$phone ($phone_type)
+$email
+		
+$reason_upper Information:
+
+$info
+";
+		return $msg;
+	}
+	public function onCompleted( $data, $conf_num, $now )
+	{
+		/*
+donation:Array ( [first_name] => Ted [last_name] => Lowe [address] => 2003 Paddock Ct [city] => Wheaton [usastate] => IL [zipcode] => 60187 [phone] => 630-260-0424 [phone_type] => Cell [email] => lists@creativespirits.org [payment_reason] => Annual Fund (matched) [amount] => 1 [otheramount] => 1 [payment_type] => donate [card_first_name] => Ted [card_last_name] => Lowe [cardno] => 4111111111111112 [cardexpmonth] => 09 [cardexpyear] => 2016 [cardccv] => 123 )
+join:Array ( [first_name] => Ted [last_name] => Lowe [address] => 2003 Paddock Ct [city] => Wheaton [usastate] => IL [zipcode] => 60187 [phone] => 630-260-0424 [phone_type] => Cell [email] => lists@creativespirits.org [birthdate] => 1957-11-06 [gender] => Male [lang_pref] => English [payment_reason] => Single Person|60|1|0|0 [source] => Web Browsing [amount] => 60 [payment_type] => join [card_first_name] => Ted [card_last_name] => Lowe [cardno] => 4111111111111112 [cardexpmonth] => 01 [cardexpyear] => 2032 [cardccv] => 123 )
+renew:Array ( [first_name] => Ted [last_name] => Lowe [phone] => 630-260-0424 [phone_type] => Cell [email] => lists@creativespirits.org [payment_reason] => Single Person|60|1|0|0 [amount] => 60 [payment_type] => renew [card_first_name] => Ted [card_last_name] => Lowe [cardno] => 4111111111111112 [cardexpmonth] => 12 [cardexpyear] => 2032 [cardccv] => 123 )
+
+		 */
+	
+		$to = $data["email"];
+		$name = $data["first_name"] . " " . $data["last_name"];
+		$org_rep = "membership@theosophical.org"; //getStrEmailFromAddr();
+		$from = "TS Membership" . " <$org_rep>";
+		$addhdrs = "From: " . $from . "\r\n";
+		$type = $data["payment_type"];
+		$subjtype = $type == "join" ? "Membership" : (($type == "renew") ? "Renewal" : "Donation");
+		$subj = "$subjtype Confirmation for $name";
+		
+		//$person_info = getPersonInfo( $data, "\n" );
+		//$what_info = getWhatInfo( $data, "\n" );
+
+		$msg = $this->getConfirmationMsg( $data, $conf_num, $now );
+
+		// if sending email to person, bcc org, else just email org
+	
+		if ( ! empty( $to ) )
+		{
+			$addhdrs .= "Bcc: " . $org_rep . "\r\n";
+		}
+		else
+		{
+			$to = $org_rep;
+		}
+	
+		mail( $to, $subj, $msg, $addhdrs );
+		
+		//todos: check mail() return status???
 	}
 
 /**
