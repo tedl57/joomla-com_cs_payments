@@ -11,8 +11,17 @@ class Cs_paymentsPayprocActionDownload extends Cs_paymentsPayprocAction
 	public function getTitle() { return "Download a CSV file containing the payment information?"; }
 	public function executeAction()
 	{
-		//$row = mdb3GetTableRowByID( getTableName(TBLNAME), $id );
-		
+		$id = $this->getId();
+//$id = 2000;
+		$sql = "SELECT * FROM #__cs_payments WHERE id=$id";
+		$db = & JFactory::getDBO();
+		$db->setQuery($sql);
+		$row = $db->loadAssoc();
+		if ( !is_array($row))
+			jexit("No row for ID $id");
+//print_r($row);
+//jexit("<br />id=$id");
+	
 		$rows = maptocsv($row);
 		
 		exit(csvResultsTSA($rows,false,"$id.csv"));
@@ -131,46 +140,64 @@ Alabama, Connecticut, Delaware, District of Columbia, Florida, Georgia, Kentucky
 function mapStateToDistrict($stabbr)
 {
 	$district_map = array(
-			"Central" => array( "Arkansas", "Illinois", "Indiana", "Iowa", "Kansas", "Louisiana", "Michigan", "Minnesota", "Missouri", "Ohio", "Oklahoma", "Texas", "Wisconsin" ),
-			"Western" => array( "Alaska", "Arizona", "California", "Colorado", "Hawaii", "Idaho", "Montana", "Nebraska", "Nevada", "New Mexico", "North Dakota", "Oregon", "South Dakota", "Utah", "Washington", "Wyoming" ),
-			"Eastern" => array( "Alabama", "Connecticut", "Delaware", "District of Columbia", "Florida", "Georgia", "Kentucky", "Maine", "Maryland", "Massachusetts", "Mississippi", "New Hampshire", "New Jersey", "New York", "North Carolina", "Pennsylvania", "Rhode Island", "South Carolina", "Tennessee", "Vermont", "Virginia", "West Virginia" )
+			"Central" => array( "AR", "IL", "IN", "IA", "KS", "LA", "MI", "MN", "MO", "OH", "OK", "TX", "WI" ),
+			"Western" => array( "AK", "AZ", "CA", "CO", "HI", "ID", "MT", "NE", "NV", "NM", "ND", "OR", "SD", "UT", "WA", "WY" ),
+			"Eastern" => array( "AL", "CT", "DE", "DC", "FL", "GA", "KY", "ME", "MD", "MA", "MS", "NH", "NJ", "NY", "NC", "PA", "RI", "SC", "TN", "VT", "VA", "WV" )
 	);
-	//todos:$st = formMapStateAbbrToState( $stabbr );
 	foreach( $district_map as $k => $arr )
 	{
-		if ( in_array($st,$arr) )
+		if ( in_array($stabbr,$arr) )
 			return $k;
 	}
 	return "No District";
 
 }
-
+/*
+Array ( 
+[id] => 1870 
+[amount] => 1 
+[payment_type] => donate 
+[payment_reason] => Internet Services 
+[datetimestamp] => 2014-08-13 20:02:06 
+[date_paid] => 2014-08-13 20:02:06 
+[processed_by] => 
+[processed_date] => 
+[response] => 2217815545 
+[created_by] => 0 
+[first_name] => Ted 
+[last_name] => Lowe 
+[address] => 2003 Paddock Ct 
+[city] => Wheaton 
+[usastate] => IL 
+[zipcode] => 60187 
+[phone] => 630-260-0424 
+[phone_type] => Home 
+[email] => lists@creativespirits.org 
+[source] => 
+[gender] => 
+[lang_pref] => ) 
+ */
 function maptocsv($row)
 {
 	//$is_don = $row["item_type"] == "donate";
 	//$datrow = mdb2GetTableRowByID( $is_don ? "tbldonors" : "tblmembers", $row["item_id"] );
 	// insert some data before mapping
-	$datrow = unserialize($row["person"]);
+	$datrow = $row;//unserialize($row["person"]);
 	$datrow["date"]=date("m/d/Y",strtotime($row["date_paid"]));
 	$datrow["amount"]=$row["amount"];
-	$datrow["what"]=$row["what"];
+	$datrow["what"]=$row["payment_reason"];
 	$datrow["id1"]="WEB1-".$row["id"];
 	$datrow["id2"]="WEB2-".$row["id"];
 	$datrow["id3"]="WEB3-".$row["id"];
-	$datrow["addr_region"] = mapStateToDistrict( $datrow["state"] );
-	list( $datrow["hphone"], $datrow["wphone"], $datrow["cphone"] ) = array("a","b","c");//todos: getPhoneTypeArray( $datrow["phone"], $datrow["phone_type"]);
-	//$datrow[strtolower(substr($datrow["phone_type"],0,1))."phone"] = $datrow["phone"];
-	//unset($datrow["phone_type"]);
-	//unset($datrow["phone"]);
+	$datrow["addr_region"] = mapStateToDistrict( $datrow["usastate"] ); // Illinois is now IL
+	list( $datrow["hphone"], $datrow["wphone"], $datrow["cphone"] ) = getPhoneTypeArray( $datrow["phone"], $datrow["phone_type"]);
 
-	//echo "<br>1:row<br>"; Var_Dump::display($row); echo "<br>";
-	//echo "<br>1.5:datrow<br>"; Var_Dump::display($datrow); echo "<br>";
-	$map = array( "j" =>
+	$map = array( "join" =>
 			array(
 					array("ImportID"=>"",),
 					array("KeyInd"=>"I",),
-					array("FirstName"=>"fname",),
-					array("LastName"=>"lname",),
+					array("FirstName"=>"first_name",),
+					array("LastName"=>"last_name",),
 					array("PrimAddID"=>"45",),
 					array("PrimSalID"=>"16",),
 					array("AddrImpID"=>"id1",),
@@ -178,8 +205,8 @@ function maptocsv($row)
 					array("AddrType"=>"Home",),
 					array("AddrLines"=>"address",),
 					array("AddrCity"=>"city",),
-					array("AddrState"=>"state",),
-					array("AddrZIP"=>"zip",),
+					array("AddrState"=>"usastate",),
+					array("AddrZIP"=>"zipcode",),
 					array("PhoneAddrImpID"=>"id1",),
 					array("PhoneImpID"=>"id2",),
 					array("PhoneNum"=>"phone",),
@@ -194,19 +221,19 @@ function maptocsv($row)
 					array("CAttrCat"=>"Join Method",),
 					array("CAttrDesc"=>"source",),
 					array("CAttrDate"=>"date",),	// just use mm/dd/yyyy paid
-					array("Bday"=>"bday",),			//  mm/dd/yyyy if collected
+					array("Bday"=>"birthdate",),			//  mm/dd/yyyy if collected
 					array("AddrRegion"=>"addr_region",),
 					array("Gender"=>"gender",),
 					array("ConsCodeImpID"=>"",),	// leave blank
-					array("ConsCode"=>"language",),	// preferred language
+					array("ConsCode"=>"lang_pref",),	// preferred language
 	),
-	"d"=> array(
-	array("First Name"=>"fname",),
-	array("Last Name"=>"lname",),
+	"donate"=> array(
+	array("First Name"=>"first_name",),
+	array("Last Name"=>"last_name",),
 	array("Street"=>"address",),
 	array("City"=>"city",),
-	array("State"=>"state",),
-	array("Zip"=>"zip",),
+	array("State"=>"usastate",),
+	array("Zip"=>"zipcode",),
 	array("Home Phone"=>"hphone",),
 	array("Work Phone"=>"wphone",),
 	array("Cell Phone"=>"cphone",),
@@ -215,9 +242,9 @@ function maptocsv($row)
 	array("Donation Date"=>"date",),
 	array("Donation Fund"=>"what",),
 	),
-	"r" => array(
-	array("First Name"=>"fname",),
-	array("Last Name"=>"lname",),
+	"renew" => array(
+	array("First Name"=>"first_name",),
+	array("Last Name"=>"last_name",),
 	array("Home Phone"=>"hphone",),
 	array("Work Phone"=>"wphone",),
 	array("Cell Phone"=>"cphone",),
@@ -226,9 +253,13 @@ function maptocsv($row)
 	array("Renewal Date"=>"date",),
 	array("Renewal Type"=>"what",),
 	));
-	$usemap = $map[$row["payment_reason"]];
+	
+//echo "<br/>datrow:";print_r($datrow);echo "<br/>";	
+//echo "<br/>map:";print_r($map);echo "<br/>";
+	$usemap = $map[$row["payment_type"]];
 	//echo "<br>2:usemap<br>"; Var_Dump::display($usemap); echo "<br>";
-
+//echo "<br/>usemap:";print_r($usemap);echo "<br/>";
+//jexit("<br/>bye");
 	//$rowkeys = array_keys($datrow);
 	//echo "<br>3:rowkeys<br>"; Var_Dump::display($rowkeys); echo "<br>";
 	$mapout = array();
@@ -249,5 +280,20 @@ function maptocsv($row)
 
 	//echo "<br>4:mapout<br>"; Var_Dump::display($mapout); echo "<br>";
 	return $mapout;
+}
+function getPhoneTypeArray($fon,$typ)
+{
+	// return an array of size 3 with one phone number filled in based on phone type
+	// eg, home phone: "1234567890","",""
+	// eg, work phone: "","1234567890",""
+	// eg, cell phone: "","","1234567890"
+	$ret = array("","","");
+	$ndx = 0;
+	if ( $typ == "Work" )
+		$ndx = 1;
+	else if ( $typ == "Cell" )
+		$ndx = 2;
+	$ret[$ndx] = $fon;
+	return $ret;
 }
 ?>
