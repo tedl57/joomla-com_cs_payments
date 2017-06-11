@@ -493,6 +493,8 @@ com_workshopregister/workshopregister.php:		$ppc = new ofPayPalCollector( "works
 
 		return true;
 	}
+	/* create and return a text message that will be emailed back to the user and org rep
+	 */
 	public function getConfirmationMsg( $data, $conf_num, $now )
 	{
 		$reason_lower = $reason_noun = $addr = "";
@@ -506,9 +508,9 @@ com_workshopregister/workshopregister.php:		$ppc = new ofPayPalCollector( "works
 	
 		switch($payment_type)
 		{
-		case 'join':
-			$reason_lower = "membership";
-			$reason_noun = "Member";
+		case 'join': // membership application per Bev 6/2017
+			$reason_lower = "membership application";
+			$reason_noun = "Applicant";
 			break;
 		case 'renew':
 			$reason_lower = "renewal";
@@ -555,7 +557,18 @@ $first_name $last_name";
 $phone ($phone_type)
 $email
 		
-$reason_upper Information:
+";
+if ( $payment_type == 'join' )
+	$msg .= "Membership applied for:
+
+$info
+
+We will process your application as soon as possible and then send your confirmation email with more details.
+
+Thank you!
+";
+else 
+	$msg .= "$reason_upper Information:
 
 $info
 ";
