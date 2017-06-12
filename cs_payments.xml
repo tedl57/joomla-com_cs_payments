@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="component" version="3.0" method="upgrade">
     <name>com_cs_payments</name>
-    <creationDate>2014-06-11</creationDate>
+    <creationDate>2017-06-11</creationDate>
     <theCreationDate>2013-12-09</theCreationDate>
     <copyright>Copyright (C) Creative Spirits 2017. All rights reserved.</copyright>
     <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
