@@ -425,7 +425,7 @@ com_workshopregister/workshopregister.php:		$ppc = new ofPayPalCollector( "works
 		
 		$data = $app->getUserState('com_cs_payments.payment.data', array());
 		$data["datetimestamp"] = $now;
-		$data["payment_type"] = $reason;
+		$data["payment_type"] = $reason;	// join, renew or donate
 		if ( $reason != "donate" )
 		{
 			//todos: check for proper settings
@@ -585,9 +585,15 @@ renew:Array ( [first_name] => Ted [last_name] => Lowe [phone] => 630-260-0424 [p
 	
 		$to = $data["email"];
 		$name = $data["first_name"] . " " . $data["last_name"];
-		$org_rep = "membership@theosophical.org"; //getStrEmailFromAddr();
-		$from = "TS Membership" . " <$org_rep>";
+		
+		// prepare the email From: line
+		$org_rep = JComponentHelper::getParams('com_cs_payments')->get('org_membership_email_address');
+		$org_abbr = JComponentHelper::getParams('com_cs_payments')->get('org_name_abbr');
+		$org_dept = $type == "donate" ? "Donation" : "Membership";
+		$from = sprintf( "%s %s <%s>", $org_abbr, $org_dept, $org_rep );
 		$addhdrs = "From: " . $from . "\r\n";
+		
+		// prepare the email Subject: line
 		$type = $data["payment_type"];
 		$subjtype = $type == "join" ? "Membership" : (($type == "renew") ? "Renewal" : "Donation");
 		$subj = "$subjtype Confirmation for $name";
