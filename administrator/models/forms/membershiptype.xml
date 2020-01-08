@@ -13,6 +13,12 @@
             label="COM_CS_PAYMENTS_FORM_LBL_DUES"
             description="COM_CS_PAYMENTS_FORM_DESC_DUES" required="true"
         	filter="safehtml" />
+       <field name="archived" type="text"
+            label="archived label"
+            description="archived description" /> 
+       <field name="sponsor_level" type="text"
+            label="sponsor level label"
+            description="sponsor level description" /> 
        <field name="show_order" type="text"
             label="COM_CS_PAYMENTS_FORM_LBL_SHOW_ORDER"
             description="COM_CS_PAYMENTS_FORM_DESC_SHOW_ORDER" /> 

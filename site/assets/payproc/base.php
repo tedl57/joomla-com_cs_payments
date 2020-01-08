@@ -13,8 +13,8 @@ abstract class Cs_paymentsPayprocAction
 	// abstract methods child classes MUST PROVIDE
 	abstract public function executeAction();	// this does the real work
 	static abstract public function getAuthLevel();	// eg, core.edit.state
-	abstract public function getTitle();		// tooltip-like description
-	
+	abstract public function getTitle();		// tooltip-like description - returns false to not be shown
+
 	/////////////////////////////////////////
 	// public methods
 	public function __construct($id,$username,$action)
@@ -36,7 +36,7 @@ abstract class Cs_paymentsPayprocAction
 	static public function getScriptDirectory() { return realpath(dirname(__FILE__)); }
 	static public function getBaseClassName() { return get_class(); }
 	static public function getChildClassName($action) { return self::getBaseClassName().ucwords($action); }
-	static public function getBuiltins() { return array('process'); }	// add new builtin here
+	static public function getBuiltins() { return array('process','show_data'); }	// add new builtin here
 	static public function isActionBuiltin($action) { return in_array($action, self::getBuiltins() ); }
 	static public function loadActionClass($dir=null, $action=null, $bAuthorize=true)
 	{

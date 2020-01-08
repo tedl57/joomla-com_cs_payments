@@ -149,9 +149,130 @@ abstract class Cs_paymentsHelper
 			$result = "$verb to $the$org";
 			break;
 		default:
-			jexit('improper reason');
+			//bug1 throw new Exception("improper reason1");
+			jexit('improper reason1');
 		}
 		return $result;
 	}
-}
+	/* create and return a text message that will be emailed back to the user and org rep
+	 */
+	public static function getConfirmationMsg( $data, $conf_num, $now )
+	{
 
+//JFactory::getApplication()->enqueueMessage("bug1:getConfirmationMsg ".json_encode($data), 'info');
+if ( (!is_array($data)) || empty($data))
+		return "bad data";// bug1
+		$reason_lower = $reason_noun = $addr = "";
+		$addr = "";
+		$payment_type = $data["payment_type"];
+		$first_name= $data["first_name"];
+		$last_name = $data["last_name"];
+		$phone = $data["phone"];
+		$phone_type= $data["phone_type"];
+		$email = $data["email"];
+	
+		switch($payment_type)
+		{
+			case 'join': // membership application per Bev 6/2017
+				$reason_lower = "membership application";
+				$reason_noun = "Applicant";
+				break;
+			case 'renew':
+				$reason_lower = "renewal";
+				$reason_noun = "Member";
+				break;
+			case 'donate':
+				$reason_lower = "donation";
+				$reason_noun = "Donor";
+				break;
+			default:
+				//bug1 throw new Exception("improper reason2");
+				jexit('improper reason2');
+		}
+		if ( $payment_type != "renew" )
+			$addr = "
+${data['address']}
+${data['city']}, ${data['usastate']} ${data['zipcode']}";
+	
+		$reason_upper = ucwords($reason_lower);
+	
+		if ( $payment_type == "donate" )
+			$info = "Fund: ${data['payment_reason']}
+Amount: \$${data['amount']}";
+		else
+		{
+			$arr = explode('|',$data["payment_reason"]);
+			$typ = $arr[0];
+			$len = $arr[2];
+			$s = $len > 1 ? "s" : "";
+			$dues = '$' . $data["amount"];
+				
+			$info = "Type: $typ
+Length: $len Year$s
+Dues: $dues";
+		}
+		$msg = "Thank you for your $reason_lower!
+	
+Your $reason_lower has been recorded as of $now with confirmation # $conf_num.
+	
+$reason_noun Information:
+	
+$first_name $last_name$addr
+$phone ($phone_type)
+$email
+	
+";
+		if ( $payment_type == 'join' )
+			$msg .= "Membership applied for:
+
+$info
+
+We will process your application as soon as possible and then send your confirmation email with more details.
+	
+Welcome aboard!
+";
+		else
+		$msg .= "$reason_upper Information:
+	
+$info
+";
+		return $msg;
+	}
+	public static function onCompleted( $data, $conf_num, $now )
+	{
+
+//JFactory::getApplication()->enqueueMessage("bug1:onCompleted ".json_encode($data), 'info');	
+		$to = $data["email"];
+		$name = $data["first_name"] . " " . $data["last_name"];
+	
+		// prepare the email From: line
+		$org_rep = JComponentHelper::getParams('com_cs_payments')->get('org_membership_email_address');
+		$org_abbr = JComponentHelper::getParams('com_cs_payments')->get('org_name_abbr');
+		$org_dept = $type == "donate" ? "Donation" : "Membership";
+		$from = sprintf( "%s %s <%s>", $org_abbr, $org_dept, $org_rep );
+		$addhdrs = "From: " . $from . "\r\n";
+	
+		// prepare the email Subject: line
+		$type = $data["payment_type"];
+		$subjtype = $type == "join" ? "Membership" : (($type == "renew") ? "Renewal" : "Donation");
+		$subj = "$subjtype Confirmation for $name";
+	
+		// todo: use new templated email library
+		$msg = Cs_paymentsHelper::getConfirmationMsg( $data, $conf_num, $now );
+
+		// if sending email to person, bcc org, else just email org
+	
+		if ( ! empty( $to ) )
+		{
+			$addhdrs .= "Bcc: " . $org_rep . "\r\n";
+		}
+		else
+		{
+			$to = $org_rep;
+		}
+	
+		mail( $to, $subj, $msg, $addhdrs );
+	
+		//todos: check mail() return status???
+	}
+}

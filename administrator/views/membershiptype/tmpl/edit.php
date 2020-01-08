@@ -51,6 +51,8 @@ $document->addStyleSheet('components/com_cs_payments/assets/css/cs_payments.css'
    				<input type="hidden" name="jform[id]" value="<?php echo $this->item->id; ?>" />
 				<input type="hidden" name="jform[typ]" value="<?php echo $this->item->typ; ?>" />
 				<input type="hidden" name="jform[dues]" value="<?php echo $this->item->dues; ?>" />
+				<input type="hidden" name="jform[sponsor_level]" value="<?php echo $this->item->sponsor_level; ?>" />
+				<input type="hidden" name="jform[archived]" value="<?php echo $this->item->archived; ?>" />
 				<input type="hidden" name="jform[show_order]" value="<?php echo $this->item->show_order; ?>" />
 				<input type="hidden" name="jform[lifetime_membership]" value="<?php echo $this->item->lifetime_membership; ?>" />
 				<input type="hidden" name="jform[age_max]" value="<?php echo $this->item->age_max; ?>" />
@@ -67,10 +69,18 @@ $document->addStyleSheet('components/com_cs_payments/assets/css/cs_payments.css'
 				</div>
 								
 				<div class="control-group">
+					<div class="control-label"><?php echo $this->form->getLabel('sponsor_level'); ?></div>
+					<div class="controls"><?php echo $this->form->getInput('sponsor_level'); ?></div>
+				</div>
+				<div class="control-group">
+					<div class="control-label"><?php echo $this->form->getLabel('archived'); ?></div>
+					<div class="controls"><?php echo $this->form->getInput('archived'); ?></div>
+				</div>
+				<div class="control-group">
 					<div class="control-label"><?php echo $this->form->getLabel('show_order'); ?></div>
 					<div class="controls"><?php echo $this->form->getInput('show_order'); ?></div>
 				</div>
-								
+												
 				<div class="control-group">
 					<div class="control-label"><?php echo $this->form->getLabel('lifetime_membership'); ?></div>
 					<div class="controls"><?php echo $this->form->getInput('lifetime_membership'); ?></div>

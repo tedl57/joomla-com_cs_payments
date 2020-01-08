@@ -5,6 +5,8 @@ CREATE TABLE IF NOT EXISTS `#__cs_payments` (
 `payment_reason` VARCHAR(255)  NOT NULL ,
 `datetimestamp` DATETIME DEFAULT NULL,
 `date_paid` DATETIME DEFAULT NULL,
+`date_completed` DATETIME DEFAULT NULL,
+`date_cancelled` DATETIME DEFAULT NULL,
 `processed_by` VARCHAR(255)  NOT NULL ,
 `processed_date` DATETIME DEFAULT NULL,
 `response` VARCHAR(255)  NOT NULL ,
@@ -40,10 +42,12 @@ CREATE TABLE IF NOT EXISTS `#__cs_donation_funds` (
 -- (6, 'Library-Friends of Olcott ),
 -- (7, 'Education');
 
-CREATE TABLE IF NOT EXISTS `#__cs_membership_types` (
+CREATE TABLE IF NOT EXISTS `#__cs_members_types` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `typ` varchar(255) NOT NULL,
   `dues` varchar(255) NOT NULL,
+  `sponsor_level` int(11) NOT NULL DEFAULT '0',
+  `archived` int(11) NOT NULL DEFAULT '0',
   `show_order` int(11) NOT NULL DEFAULT '0',
   `lifetime_membership` int(11) NOT NULL DEFAULT '0',
   `age_min` int(11) NOT NULL DEFAULT '0',
@@ -51,7 +55,7 @@ CREATE TABLE IF NOT EXISTS `#__cs_membership_types` (
   PRIMARY KEY (`id`)
 ) DEFAULT COLLATE=utf8_general_ci;
 
--- INSERT INTO `#__cs_membership_types` (`id`, `typ`, `dues`, `show_order`, `lifetime_membership`, `age_max`, `age_min`) VALUES
+-- INSERT INTO `#__cs_members_types` (`id`, `typ`, `dues`, `show_order`, `lifetime_membership`, `age_max`, `age_min`) VALUES
 -- (1, 'Single Person', '60,108,153', 1, 0, 0, 0),
 -- (2, 'Student', '30', 2, 0, 24, 0),
 -- (3, 'Senior', '30', 3, 0, 0, 75),
@@ -59,13 +63,13 @@ CREATE TABLE IF NOT EXISTS `#__cs_membership_types` (
 -- (5, 'Single Person Lifetime', '1500', 5, 1, 0, 0),
 -- (6, 'Prisoner', '24', 4, 0, 0, 0);
 
-CREATE TABLE IF NOT EXISTS `#__cs_sources` (
+CREATE TABLE IF NOT EXISTS `#__cs_members_sources` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `source` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) DEFAULT COLLATE=utf8_general_ci;
 
--- INSERT INTO `#__cs_sources` (`id`, `source`) VALUES
+-- INSERT INTO `#__cs_members_sources` (`id`, `source`) VALUES
 -- (1, 'Member Referral'),
 -- (2, 'Web Search'),
 -- (3, 'Event'),

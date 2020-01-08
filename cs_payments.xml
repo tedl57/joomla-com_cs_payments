@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="component" version="3.0" method="upgrade">
     <name>com_cs_payments</name>
-    <creationDate>2017-06-12</creationDate>
+    <creationDate>2020-01-07</creationDate>
     <theCreationDate>2013-12-09</theCreationDate>
-    <copyright>Copyright (C) Creative Spirits 2017. All rights reserved.</copyright>
+    <copyright>Copyright (C) Creative Spirits 2020. All rights reserved.</copyright>
     <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
     <author>Ted Lowe</author>
     <authorEmail>lists@creativespirits.org</authorEmail>
-    <authorUrl>http://www.creativespirits.org</authorUrl>
-    <version>1.0.3</version>
+    <authorUrl>https://www.creativespirits.org</authorUrl>
+    <version>1.0.4</version>
     <description>Collect information and payments online.</description>
 
     <install> <!-- Runs on install -->
@@ -73,7 +73,7 @@
 	</update>
 	<updateservers>
 		<!-- Note: No spaces or linebreaks allowed between the server tags -->
-   		<server type="extension" priority="1" name="com_cs_payments">http://creativespirits.org/products/joomla/com_cs_payments-update.xml</server>
+   		<server type="extension" priority="1" name="com_cs_payments">https://creativespirits.org/products/joomla/com_cs_payments-update.xml</server>
 	</updateservers>
 </extension>
 <!-- Component built by the Joomla Component Creator -->

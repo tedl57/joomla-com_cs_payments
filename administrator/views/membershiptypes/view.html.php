@@ -120,6 +120,8 @@ class Cs_paymentsViewMembershiptypes extends JViewLegacy
 		'a.id' => JText::_('JGRID_HEADING_ID'),
 		'a.typ' => JText::_('COM_CS_PAYMENTS_MEMBERSHIP_TYPES_TYP'),
 		'a.dues' => JText::_('COM_CS_PAYMENTS_MEMBERSHIP_TYPES_DUES'),
+		'a.sponsor_level' => JText::_('Sponsor Level'),
+		'a.archived' => JText::_('Archived'),
 		'a.show_order' => JText::_('COM_CS_PAYMENTS_MEMBERSHIP_TYPES_SHOW_ORDER'),
 		'a.lifetime_membership' => JText::_('COM_CS_PAYMENTS_MEMBERSHIP_TYPES_LIFETIME_MEMBERSHIP'),
 		'a.age_max' => JText::_('COM_CS_PAYMENTS_MEMBERSHIP_TYPES_AGE_MAX'),

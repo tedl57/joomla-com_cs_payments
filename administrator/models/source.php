@@ -114,7 +114,7 @@ class Cs_paymentsModelsource extends JModelAdmin
 			// Set ordering to the last item if not set
 			if (@$table->ordering === '') {
 				$db = JFactory::getDbo();
-				$db->setQuery('SELECT MAX(ordering) FROM #__cs_sources');
+				$db->setQuery('SELECT MAX(ordering) FROM #__cs_members_sources');
 				$max = $db->loadResult();
 				$table->ordering = $max+1;
 			}

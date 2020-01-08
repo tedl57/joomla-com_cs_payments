@@ -35,9 +35,9 @@ public 'address' => string '' (length=0)
 public 'city' => string '' (length=0)
 public 'usastate' => string '' (length=0)
 public 'zipcode' => string '' (length=0)
-public 'phone' => string '630-260-0424' (length=12)
+public 'phone' => string '555-555-5555' (length=12)
 public 'phone_type' => string 'Home' (length=4)
-public 'email' => string 'trl@ss.ss' (length=9)
+public 'email' => string 'user@example.com' (length=9)
 public 'source' => string '' (length=0)
 public 'gender' => string '' (length=0)
 public 'lang_pref' => string '' (length=0)
@@ -95,7 +95,7 @@ function mapDataToCSV($row)
 	// insert some data before mapping
 	$row = array();
 	$row["id"] = "1849";
-	$row["person"] = 'a:9:{s:5:"fname";s:8:"Donald E";s:5:"lname";s:6:"Miller";s:7:"address";s:20:"7295 County Road 233";s:4:"city";s:4:"Silt";s:5:"state";s:2:"CO";s:3:"zip";s:5:"81652";s:10:"phone_type";s:4:"Home";s:5:"phone";s:12:"970-876-2330";s:5:"email";s:22:"donalde.milller@me.com";}';
+	$row["person"] = 'a:9:{s:5:"fname";s:8:"Robert S";s:5:"lname";s:6:"Milmer";s:7:"address";s:20:"1234 County Road 321";s:4:"city";s:4:"Main";s:5:"state";s:2:"CO";s:3:"zip";s:5:"55555";s:10:"phone_type";s:4:"Home";s:5:"phone";s:12:"555-555-5555";s:5:"email";s:22:"ddddddd.mmmmmmm@mm.com";}';
 	$row["date_paid"] = "2014-01-02 22:20:20";
 	$row["amount"] = "50";
 	$row["what"] = "Annual Fund (matched)";

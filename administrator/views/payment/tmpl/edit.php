@@ -54,6 +54,8 @@ $document->addStyleSheet('components/com_cs_payments/assets/css/cs_payments.css'
 				<input type="hidden" name="jform[what]" value="<?php echo $this->item->what; ?>" />
 				<input type="hidden" name="jform[datetimestamp]" value="<?php echo $this->item->datetimestamp; ?>" />
 				<input type="hidden" name="jform[date_paid]" value="<?php echo $this->item->date_paid; ?>" />
+				<input type="hidden" name="jform[date_completed]" value="<?php echo $this->item->date_completed; ?>" />
+				<input type="hidden" name="jform[date_cancelled]" value="<?php echo $this->item->date_cancelled; ?>" />
 				<input type="hidden" name="jform[processed_by]" value="<?php echo $this->item->processed_by; ?>" />
 				<input type="hidden" name="jform[processed_date]" value="<?php echo $this->item->processed_date; ?>" />
 				<input type="hidden" name="jform[response]" value="<?php echo $this->item->response; ?>" />

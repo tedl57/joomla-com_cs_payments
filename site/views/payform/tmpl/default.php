@@ -24,7 +24,7 @@ if (empty($data))	// todos: decide how to handle
 $theModel = JModelLegacy::getInstance('payments', 'Cs_paymentsModel');
 
 $form = $theModel->getForm();
-$formhtml = Cs_paymentsHelper::renderForm($form,"form-info","confirmpayment");
+$formhtml = Cs_paymentsHelper::renderForm($form,"form-pay","confirmpayment");// todo: was form-info 12/29/18
 $formendhtml = Cs_paymentsHelper::renderFormEnd();
 
 echo<<<EOT

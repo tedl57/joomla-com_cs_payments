@@ -96,7 +96,7 @@ class Cs_paymentsModelsources extends JModelList {
                         'list.select', 'a.*'
                 )
         );
-        $query->from('`#__cs_sources` AS a');
+        $query->from('`#__cs_members_sources` AS a');
 
         // Filter by search in title
         $search = $this->getState('filter.search');

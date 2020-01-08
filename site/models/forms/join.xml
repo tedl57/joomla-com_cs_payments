@@ -129,12 +129,18 @@
            			</field>
         </fieldset>
         <fieldset name="source" label="How did you hear about us?">
-                  <field name="source" type="sql" query="SELECT id, source FROM #__cs_sources ORDER BY source" key_field="source" value_field="source" label="Source" required="true"
+                  <field name="source" type="sql" query="SELECT id, source FROM #__cs_members_sources WHERE show_public=1 ORDER BY source" key_field="source" value_field="source" label="Source" required="true"
                   
         			description="Please select where you heard about us"
         			>
            			<option value="">COM_CS_PAYMENTS_OPTION_SELECT</option>
            			</field>
-        
+           			<field
+                    type="text"
+                    name="source_more"
+                    id="source_more"
+                    label="More Details?"
+                    description="Enter more details if you want to."
+                    maxLength="255" />
         </fieldset>
 </form>

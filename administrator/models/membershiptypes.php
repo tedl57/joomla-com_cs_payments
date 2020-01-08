@@ -29,8 +29,10 @@ class Cs_paymentsModelmembershiptypes extends JModelList {
                                 'id', 'a.id',
                 'typ', 'a.typ',
                 'dues', 'a.dues',
-                'show_order', 'a.show_order',
-                'lifetime_membership', 'a.lifetime_membership',
+                'sponsor_level', 'a.sponsor_level',
+                'archived', 'a.archived',
+            	'show_order', 'a.show_order',
+            	'lifetime_membership', 'a.lifetime_membership',
                 'age_max', 'a.age_max',
             	'age_min', 'a.age_min',	
             );
@@ -101,7 +103,7 @@ class Cs_paymentsModelmembershiptypes extends JModelList {
                         'list.select', 'a.*'
                 )
         );
-        $query->from('`#__cs_membership_types` AS a');
+        $query->from('`#__cs_members_types` AS a');
 
         
 		// Join over the user field 'created_by'

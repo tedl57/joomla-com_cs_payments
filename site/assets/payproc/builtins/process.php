@@ -15,7 +15,7 @@ class Cs_paymentsPayprocActionProcess extends Cs_paymentsPayprocAction
 		// set processed date and by which user's name
 		$data = array();
 		$data['id'] = $this->id;
-		$data['processed_date'] = date('Y-m-d H:i:s', time() );	// todos: may be able to use JFactory::getDate();
+		$data['processed_date'] = date('Y-m-d H:i:s' );
 		$data['processed_by'] = $this->username;
 		$theModel = JModelLegacy::getInstance('payments', 'Cs_paymentsModel');
 		if ( $theModel->save($data) === false )

@@ -51,7 +51,24 @@
             description="COM_CS_PAYMENTS_FORM_DESC_PAYMENT_DATE_PAID" 
         format="%Y-%m-%d %H:%M:%S"
         filter="safehtml" /> 
-
+       <field name="date_completed" type="calendar" class="inputbox"
+        
+        
+         default="0000-00-00 00:00:00" 
+        
+            label="COM_CS_PAYMENTS_FORM_LBL_PAYMENT_DATE_COMPLETED"
+            description="COM_CS_PAYMENTS_FORM_DESC_PAYMENT_DATE_COMPLETED" 
+        format="%Y-%m-%d %H:%M:%S"
+        filter="safehtml" /> 
+       <field name="date_cancelled" type="calendar" class="inputbox"
+        
+        
+         default="0000-00-00 00:00:00" 
+        
+            label="COM_CS_PAYMENTS_FORM_LBL_PAYMENT_DATE_CANCELLED"
+            description="COM_CS_PAYMENTS_FORM_DESC_PAYMENT_DATE_CANCELLED" 
+        format="%Y-%m-%d %H:%M:%S"
+        filter="safehtml" /> 
        <field name="processed_by" type="text"
                 
             label="COM_CS_PAYMENTS_FORM_LBL_PAYMENT_PROCESSED_BY"

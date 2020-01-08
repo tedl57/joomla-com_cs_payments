@@ -119,6 +119,14 @@ if (!empty($this->extra_sidebar)) {
 				</th>
 				                    
 				<th class='left'>
+				<?php echo JHtml::_('grid.sort',  'Sponsor Level', 'a.sponsor_level', $listDirn, $listOrder); ?>
+				</th>
+				                    
+							<th class='left'>
+				<?php echo JHtml::_('grid.sort',  'Archived', 'a.archived', $listDirn, $listOrder); ?>
+				</th>
+				                    
+				<th class='left'>
 				<?php echo JHtml::_('grid.sort',  'COM_CS_PAYMENTS_MEMBERSHIP_TYPES_SHOW_ORDER', 'a.show_order', $listDirn, $listOrder); ?>
 				</th>
 				                    
@@ -210,6 +218,14 @@ if (!empty($this->extra_sidebar)) {
 				<td>
 
 					<?php echo $item->dues; ?>
+				</td>
+				<td>
+
+					<?php echo $item->sponsor_level; ?>
+				</td>
+				<td>
+
+					<?php echo $item->archived; ?>
 				</td>
 				<td>
 

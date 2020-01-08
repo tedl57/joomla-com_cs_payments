@@ -21,7 +21,7 @@ class Cs_paymentsTablemembershiptype extends JTable {
      * @param JDatabase A database connector object
      */
     public function __construct(&$db) {
-        parent::__construct('#__cs_membership_types', 'id', $db);
+        parent::__construct('#__cs_members_types', 'id', $db);
     }
 
     /**

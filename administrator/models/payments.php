@@ -32,6 +32,8 @@ class Cs_paymentsModelpayments extends JModelList {
                 'what', 'a.what',
                 'datetimestamp', 'a.datetimestamp',
                 'date_paid', 'a.date_paid',
+                'date_completed', 'a.date_completed',
+                'date_cancelled', 'a.date_cancelled',
                 'processed_by', 'a.processed_by',
                 'processed_date', 'a.processed_date',
                 'response', 'a.response',

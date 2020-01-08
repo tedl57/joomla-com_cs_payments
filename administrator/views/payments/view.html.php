@@ -123,6 +123,8 @@ class Cs_paymentsViewPayments extends JViewLegacy
 		'a.what' => JText::_('COM_CS_PAYMENTS_PAYMENTS_WHAT'),
 		'a.datetimestamp' => JText::_('COM_CS_PAYMENTS_PAYMENTS_DATETIMESTAMP'),
 		'a.date_paid' => JText::_('COM_CS_PAYMENTS_PAYMENTS_DATE_PAID'),
+		'a.date_completed' => JText::_('COM_CS_PAYMENTS_PAYMENTS_DATE_COMPLETED'),
+		'a.date_cancelled' => JText::_('COM_CS_PAYMENTS_PAYMENTS_DATE_CANCELLED'),
 		'a.processed_by' => JText::_('COM_CS_PAYMENTS_PAYMENTS_PROCESSED_BY'),
 		'a.processed_date' => JText::_('COM_CS_PAYMENTS_PAYMENTS_PROCESSED_DATE'),
 		'a.response' => JText::_('COM_CS_PAYMENTS_PAYMENTS_RESPONSE'),

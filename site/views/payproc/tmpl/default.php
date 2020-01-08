@@ -9,7 +9,11 @@
 // no direct access
 defined('_JEXEC') or die;
 
+// todo: todos: as of 12/28/18 - backend component payments table shows CAP_LABELS instead of text and there is no way to enter a paid_date and not all data is set correctly during an edit (like no phone type, source or reason) 
+
 require_once JPATH_COMPONENT.'/helpers/cs_payments.php';
+
+// retrieve paid but unprocessed payments
 
 $db = JFactory::getDbo();
 $db->setQuery("SELECT * FROM #__cs_payments WHERE date_paid IS NOT NULL AND processed_date IS NULL");
@@ -42,7 +46,7 @@ $item_n = 0;	// to stripe rows
 foreach ($items as $item) :
 ?>
 		<tr class="row<?php echo $item_n++ % 2; ?>">
-			<td class="center"><?php echo $item->id; ?></td>
+			<td class="center"><?php echo $item->id ?></td>
 			<td class="center"><?php echo getActionsHTML($actions,$item->id); ?></td>				
 			<td class="center"><?php echo '$'.$item->amount; ?></td>
 			<td class="center"><?php echo $item->date_paid; ?></td>
@@ -53,6 +57,8 @@ foreach ($items as $item) :
 	</tbody>
 </table>
 <?php endif; 
+
+// retrieve latest processed payments
 
 $db->setQuery("SELECT * FROM #__cs_payments WHERE processed_date IS NOT NULL ORDER BY processed_date DESC LIMIT 10");
 $items = $db->loadObjectList();
@@ -102,11 +108,15 @@ function getActionsHTML( $actions, $id )
 		$classname = Cs_paymentsPayprocAction::getChildClassName($action);
 		$obj = new $classname($id,$loggeduser->username,$action);
 
+		// an action will determine for itself if it should be shown
+		$title = $obj->getTitle();
+		if ( $title === false)
+			continue;
+		
 		$name = $obj->getActionNameUpper();
 		//todos: used to say "Are you sure you want to process ID $id?" - make configurable s/how
 		$confirm = (!$obj->doConfirm()) ? "" : "onClick=\"return confirm('Are you sure you want to $name?');\"";
 		$url = JRoute::_("index.php?option=com_cs_payments&view=payproc&task=payments.payproc&ppaction=".$action."&id=$id");
-		$title = $obj->getTitle();
 		$ret .= "<a href='$url' title='$title' $confirm>$name</a><br />&nbsp\n";
 	}
 	return $ret;

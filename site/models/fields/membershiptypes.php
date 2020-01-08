@@ -150,7 +150,8 @@ This method generates the following HTML for the example data above:
 		// Construct the query
 		$query = $db->getQuery(true)
 			->select('typ, dues, show_order, lifetime_membership, age_max, age_min')
-			->from('#__cs_membership_types')
+			->from('#__cs_members_types')
+			->where('show_order!=0')
 			->order('show_order');
 
 		// Setup the query

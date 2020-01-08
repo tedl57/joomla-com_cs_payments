@@ -126,6 +126,12 @@ if (!empty($this->extra_sidebar)) {
 				<?php echo JHtml::_('grid.sort',  'COM_CS_PAYMENTS_PAYMENTS_DATE_PAID', 'a.date_paid', $listDirn, $listOrder); ?>
 				</th>
 				<th class='left'>
+				<?php echo JHtml::_('grid.sort',  'COM_CS_PAYMENTS_PAYMENTS_DATE_COMPLETED', 'a.date_completed', $listDirn, $listOrder); ?>
+				</th>
+				<th class='left'>
+				<?php echo JHtml::_('grid.sort',  'COM_CS_PAYMENTS_PAYMENTS_DATE_CANCELLED', 'a.date_cancelled', $listDirn, $listOrder); ?>
+				</th>
+				<th class='left'>
 				<?php echo JHtml::_('grid.sort',  'COM_CS_PAYMENTS_PAYMENTS_PROCESSED_BY', 'a.processed_by', $listDirn, $listOrder); ?>
 				</th>
 				<th class='left'>
@@ -259,6 +265,14 @@ if (!empty($this->extra_sidebar)) {
 				<td>
 
 					<?php echo $item->date_paid; ?>
+				</td>
+				<td>
+
+					<?php echo $item->date_completed; ?>
+				</td>
+				<td>
+
+					<?php echo $item->date_cancelled; ?>
 				</td>
 				<td>
 

@@ -7,6 +7,8 @@
  * @author      Ted Lowe <lists@creativespirits.org> - http://www.creativespirits.org
  */
 
+// bug1: probably due to having both authorize.net and paypal set (non-null) - paypal@example.org
+
 // No direct access
 defined('_JEXEC') or die;
 
@@ -15,33 +17,40 @@ require_once JPATH_COMPONENT.'/controller.php';
 // todos: separate file or in static helper
 class ofPaypalCollector	// {{{1
 {
-	protected $_item_type;
-	protected $_item_name;
-	protected $_amount;
-	protected $_item_id;
-	protected $_custom;
-
-	protected $_tid;
-	protected $_host;
-	protected $_component_name = "ppcol";
-	protected $_debug = false;
-	protected $_ema;
-	protected $_image_url = "";
+	protected $_item_type;	// reason (join, renew, donate) 
+	protected $_item_name;	// type of membership (individual, business, etc.)
+	protected $_amount;		// payment amount
+	protected $_item_id;	// id of record in cs_payments table
+	protected $_custom;		// todo: what is this used for?
+	protected $_host;		// host of business website for return URLs
+	protected $_fname;		// first name passed to PayPal
+	protected $_lname;		// last name passed to PayPal
+	protected $_component_name = "cs_payments";	// for building completed/cancelled URLs
+	protected $_debug = false;	// for sandbox testing
+	protected $_ema;			// email of business?
+	protected $_image_url = "";	// logo of business to show during checkout
 
 	//////////////////////////////////////////////////////////
-	public function __construct($item_type,$item_name,$amount,$ema,$item_id=0)
+	public function __construct($item_type,$item_name,$amount,$ema,$item_id,$fname,$lname)
 	{
 		$this->_item_type = $item_type;
 		$this->_item_name = $item_name;
 		$this->_amount = $amount;
 		$this->_item_id = $item_id;
-		$this->_host = $_SERVER[HTTP_HOST];
+		$this->_host = $_SERVER["HTTP_HOST"];
 		$this->_ema = $ema;
+		$this->_fname = $fname;
+		$this->_lname = $lname;
 	}
 
 	public function setDebug()
 	{
 		$this->_debug = true;
+	}
+
+	public function getDebug()
+	{
+		return $this->_debug;
 	}
 
 	public function setImageURL( $image_url )
@@ -54,68 +63,67 @@ class ofPaypalCollector	// {{{1
 		$this->_custom = $custom;
 	}
 
-
+	/* obsoleted in joomla 3
 	public function gotoPayPal($pdata = NULL)
 	{
-		$url = $this->getURL($pdata);
+		$url = $this->getURL($pdata);		// obsolete
 		mosRedirect( $url );
 		exit();
 	}
+	*/
 
 	//////////////////////////////////////////////////////////
 	public function getURL($pdata = NULL)
 	{
-$this->setDebug(); // todos:
-	//	$gConfigHomeDir = configGetParm("HomeDir","HomeDir_NOT_SET");
-		// get unique transacton id to track thru paypal
-		$data["item_type"] = $this->_item_type;
-		$data["item_name"] = $this->_item_name;
-		if ( ! empty( $this->_custom ) )
-			$data["custom"] = $this->_custom;
-		if ( $this->_item_id )
-			$data["item_id"] = $this->_item_id;
-		$data["amount"] = $this->_amount;
-/*		$data[date_entered] = getTimeStampNow();
-		$transid = $this->_tid = mdb2PutTableRow( TBLNAME, $data );
-*/
+//live site 12/28/19 - $this->setDebug(); // todos: use sandbox
+
 		$host = $this->_host;
 		$comp_name = $this->_component_name;
 		$amount = $this->_amount;
-		$cancel_return = urlencode( "http://$host/components/com_$comp_name/${comp_name}.php?action=cancelled&actid=$transid" );
-		$completed_return = urlencode( "http://$host/components/com_$comp_name/${comp_name}.php?action=completed&actid=$transid");
-		$notify_url = urlencode( "http://$host/components/com_$comp_name/${comp_name}.php?action=notify&actid=$transid");
+		$fname = $this->_fname;
+		$lname = $this->_lname;
+		$reason = Cs_paymentsHelper::getReasonOrElse();
+		$id = $this->_item_id;
+		
+		// paypay wants completed and cancelled return URLs
+		// eg, https://domain/index.php/renew?reason=renew&view=confirmpayment
+		// todo: needs aliases for renew, join and donate 
+		// todo: paypal will POST transid and action (completed or cancelled) into URL?
+		
+		$cancel_return = urlencode("https://$host/index.php/$reason-online?reason=$reason&view=confirmpayment&paymentstatus=cancelled&paymentid=$id");
+		$completed_return = urlencode("https://$host/index.php/$reason-online?reason=$reason&view=confirmpayment&paymentstatus=completed&paymentid=$id");
+		$notify_url = urlencode("https://$host/index.php/pp-ipn-listener");	// pre-configured alias for IPN listener
+		//$notify_url = "https://$host/index.php/pp-ipn-listener";	// pre-configured alias for IPN listener
 
 		$image_option = "";
-
 		if ( ! empty( $this->_image_url ) )
 			$image_option = "&image_url=" . urlencode( $this->_image_url );
 
+		$custom_option = "";
 		if ( ! empty( $this->_custom ) )
 			$custom_option = "&custom=" . urlencode( $this->_custom );
 
-		$debug = "";
+		$DEBUG = "";
 		$ppema = $this->_ema;
 		if ( $this->_debug )
 		{
 			// use sandbox email to be able to enter non-paypal user credit card payments
-			$ppema = "tedl57_1189482713_biz@gmail.com";
-			$debug = ".sandbox";
+		//	$ppema = "t7_1189482713_biz@example.com";		// sandbox user - test seller
+			$DEBUG = ".sandbox";
 		}
+
 		$uitem = urlencode( $this->_item_name );
 
-
-		// transid is passed through on a completed transaction
+		// item_id is passed through on a completed transaction
 		// rm=2 means paypal will post return data back us
 
-		$url = "https://www$debug.paypal.com/us/cgi-bin/webscr?cmd=_xclick$custom_option$image_option&amount=$amount&item_name=$uitem&no_shipping=1&no_note=1&invoice=$transid&business=$ppema&cancel_return=$cancel_return&rm=2&return=$completed_return&notify_url=$notify_url&first_name=Ted&last_name=Lowe";
-/*
-		require_once 'Zend/Log.php';
-		require_once 'Zend/Log/Writer/Stream.php';
-		$writer = new Zend_Log_Writer_Stream("$gConfigHomeDir/data/logs/www/ppcol.log");
-		$logger = new Zend_Log($writer);
-		log_obj($logger,"_url", $url);
-*/
-		return $url;
+		// create the highly specialized PayPal URL
+		$url = "https://www$DEBUG.paypal.com/us/cgi-bin/webscr?";
+		$urlargs="cmd=_xclick$custom_option$image_option&amount=$amount&item_name=$uitem&rm=2&no_shipping=1&no_note=1&invoice=$id&business=$ppema&first_name=$fname&last_name=$lname";
+		
+		// note that the URL will be rendered by some browsers (in debugging) as &|-ify_url because &not is a special character, i tried using &amp; or %26 but then PayPal didn't work
+		
+		return $url . $urlargs . "&notify_url=$notify_url&cancel_return=$cancel_return&return=$completed_return";
 	}
 }
 
@@ -302,7 +310,7 @@ class Cs_paymentsControllerPayments extends Cs_paymentsController
 		// todos:  store an attempt to pay in the DB for staff processing
 		// The DB record will be updated when a payment is actually authorized
 
-if ( $data["card_first_name"] == "Ted" && $data["card_last_name"] == "Lowe")
+if ( $data["card_first_name"] == "Ted" && $data["card_last_name"] == "Lowe")	// easter egg
 	return (array("success_response"=>"testing123"));
 	
 		// prepare to call authorize.net -
@@ -315,7 +323,7 @@ if ( $data["card_first_name"] == "Ted" && $data["card_last_name"] == "Lowe")
 		$kv["ccv"] = $data["cardccv"];
 		$kv["amount"] = $data["amount"];
 		$kv["trans_desc"] = $reason . "|" . $data["payment_reason"];
-		$kv["zip"] = "60187"; // todos: only for $0 visa transactions or future AVS
+		$kv["zip"] = "12345"; // todos: only for $0 visa transactions or future AVS
 		$kv["conf_num"] = $conf_num;
 		$kv["email"] = $data["email"];	// optional info to contact declines if desired
 		$kv["phone"] = $data["phone"];	// optional info to contact declines if desired
@@ -352,11 +360,18 @@ if ( $data["card_first_name"] == "Ted" && $data["card_last_name"] == "Lowe")
 		// get authorize.net login id and transaction key from component params
 		$adn_login = JComponentHelper::getParams('com_cs_payments')->get('authorizedotnet_login_id');
 		$adn_tran_key = JComponentHelper::getParams('com_cs_payments')->get('authorizedotnet_transaction_key');
-		if ( (!empty($adn_login)) && (!empty($adn_tran_key)))
+		$paypal_email_address = JComponentHelper::getParams('com_cs_payments')->get('org_paypal_email_address');
+		
+		// check that only one payment processor is configured (solve bug1)
+		if ( (!empty($adn_login)) && (!empty($adn_tran_key)) && (!empty($paypal_email_address)))
+		{
+			JFactory::getApplication()->enqueueMessage('Multiple payment processors are configured.', 'error');
+			$this->setRedirect(JRoute::_("index.php", false));
+		}
+		else if ( (!empty($adn_login)) && (!empty($adn_tran_key)))
 			$this->setRedirect(JRoute::_("index.php?option=com_cs_payments&reason=$reason&view=payform", false));
 		else
 		{				
-			$paypal_email_address = JComponentHelper::getParams('com_cs_payments')->get('org_paypal_email_address');
 			if ( !empty($paypal_email_address))
 				$this->setRedirect(JRoute::_("index.php?option=com_cs_payments&reason=$reason&view=paypalform", false));
 			else
@@ -382,23 +397,38 @@ if ( $data["card_first_name"] == "Ted" && $data["card_last_name"] == "Lowe")
 	
 		$app	= JFactory::getApplication();
 		$reason = Cs_paymentsHelper::getReasonOrElse();
-		/*xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
- com_donatenami/donatenami.php:		$ppc = new ofPayPalCollector( "donate", $memtype_str, $dues, configGetOrgEmailAddress("paypal"), $conf_num );
-com_join/join.php:		$ppc = new ofPayPalCollector( "join", $memtype_str, $dues, configGetOrgEmailAddress("paypal"), $conf_num );
-com_joinnami/joinnami.php:		$ppc = new ofPayPalCollector( "join", $memtype_str, $dues, configGetOrgEmailAddress("paypal"), $conf_num );
-com_paypal/paypal.php:	$ppc = new ofPayPalCollector( $data[noun], $data[reason], $data[amount], configGetOrgEmailAddress("paypal") );
-com_ppcol/ppcol.php:class ofPaypalCollector	// {{{1
-com_renew/renew.php:		$ppc = new ofPayPalCollector( "renew", $memtype_str, $dues, configGetOrgEmailAddress("paypal"), $conf_num );
-com_workshopregister/workshopregister.php:		$ppc = new ofPayPalCollector( "workshop", "ISEA Workshop Registration", $total_due, configGetOrgEmailAddress("paypal"), $conf_num );
+		$data = $app->getUserState('com_cs_payments.payment.data', array());
+//JFactory::getApplication()->enqueueMessage("bug1:gotopaypal".json_encode($data), 'info');
+		$id = $app->getUserState('com_cs_payments.payment.id');
 
-		 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-		 */
-		$ppc = new ofPayPalCollector( "renew", "Individual", "20", "tedl57@gmail.com", "123" );
-		$ppc->setCustom( "fname lname, note" );
+		// Item Name from paypal's point of view is the thing being purchased, so
+		// renewal of Individual|1|0|0 should be translated to Individual Membership Renewal (1 Year)
+;
+		if ( $reason == "donate" )
+		{
+			$item_name = "Donation to " . $data["payment_reason"] . " fund";
+		}
+		else
+		{
+			$arr = explode('|',$data["payment_reason"]);	// Individual|60|1|0|0
+			$memtype = strtolower( $arr[0] );
+			$yrs = $arr[2];
+			$plural = $yrs != 1 ? "s" : "";
+			$item_name = sprintf( "%s year%s %s membership", $yrs, $plural, $memtype );
+				
+			if ( $reason == "renew" )
+				$item_name .= " renewal";
+		}
+
+		$id = $app->getUserState('com_cs_payments.payment.id');
+		$ppc = new ofPayPalCollector( $reason, $item_name, $data["amount"], 
+		JComponentHelper::getParams('com_cs_payments')->get('org_paypal_email_address'), $id, $data["first_name"], $data["last_name"] );
+
+		// get the highly customized URL to go to PayPal
+
 		$ppurl = $ppc->getURL();
-
-		// build paypal URL
-		//$ppurl = "https://sandbox.paypal.com/us/cgi-bin/webscr?cmd=_xclick&custom=Ted+Lowe%2C+tttt&amount=15&item_name=membership+dues&no_shipping=1&no_note=1&invoice=836&business=paypal@fveaa.org&cancel_return=http%3A%2F%2Fwww.fveaa.org%2Fcomponents%2Fcom_ppcol%2Fppcol.php%3Faction%3Dcancelled%26actid%3D836&rm=2&return=http%3A%2F%2Fwww.fveaa.org%2Fcomponents%2Fcom_ppcol%2Fppcol.php%3Faction%3Dcompleted%26actid%3D836&notify_url=http%3A%2F%2Fwww.fveaa.org%2Fcomponents%2Fcom_ppcol%2Fppcol.php%3Faction%3Dnotify%26actid%3D836";
+	
+		// now redirect user's browswer to PayPal URL to collect payment
 		$this->setRedirect($ppurl);
 	}
 
@@ -408,7 +438,7 @@ com_workshopregister/workshopregister.php:		$ppc = new ofPayPalCollector( "works
 	 * @return	void
 	 * @since	1.6
 	 */
-	public function confirmpayment()
+	public function confirmpayment()	// called only in authorize.net scenario
 	{
 		require_once JPATH_COMPONENT.'/helpers/cs_payments.php';
 
@@ -429,11 +459,14 @@ com_workshopregister/workshopregister.php:		$ppc = new ofPayPalCollector( "works
 		if ( $reason != "donate" )
 		{
 			//todos: check for proper settings
-			$arr = explode('|',$data["payment_reason"]);	// Individual|60|0|0
+			$arr = explode('|',$data["payment_reason"]);	// Individual|60|1|0|0
 			$data["amount"] = $arr[ 1 ];
 		}
 		
 		$theModel = JModelLegacy::getInstance('payments', 'Cs_paymentsModel');
+		
+		// save a record in cs_payments table prior to trying to authorize payment on authorize.net
+
 		if ( ( $conf_num = $theModel->save($data) ) === false )	//todos: need conf_num and what happens on fail
 		{
 			jexit('Failed to save preauthorization data');	//todos:
@@ -445,7 +478,7 @@ com_workshopregister/workshopregister.php:		$ppc = new ofPayPalCollector( "works
 		$ccdata = $this->input->post->get('jform',array(),'array');
 		$data = array_merge($data,$ccdata);
 		
-		// "call" payment processor to authorized payment
+		// "call" payment processor to authorize payment
 		$ret = $this->isPaymentAuthorized( $data, $conf_num, $reason );
 		
 		if ( isset( $ret["error_response"] ) )
@@ -470,154 +503,25 @@ com_workshopregister/workshopregister.php:		$ppc = new ofPayPalCollector( "works
 		}
 		// store payment confirmation number for use on payment confirmed view
 		$app->setUserState('com_cs_payments.payment.id',$conf_num);
-		// clear out all form data after successful payment
-		$app->setUserState('com_cs_payments.payment.data',null);
-
+		
 		// save successful payment authorization to DB with payment processor's transaction id and set the time paid
 		// include previous id to cause an update instead of an insert
 
 		$paiddata = array();
 		$paiddata["id"] = $conf_num;
 		$paiddata["response"] = $ret["success_response"];
-		$paiddata["date_paid"] = $now;
+		$paiddata["date_paid"] = $now;		// authorize.net scenario
 		if ( $theModel->save($paiddata) === false )
 		{
 			jexit('Failed to update postsuccess data');	//todos:
 		}
-		
-		// send confirmation via email
-		$this->onCompleted( $data, $conf_num, $now );
 
 		// show user the payment succeeded
 		$this->setRedirect(JRoute::_("index.php?option=com_cs_payments&reason=$reason&view=confirmpayment", false));
 
 		return true;
 	}
-	/* create and return a text message that will be emailed back to the user and org rep
-	 */
-	public function getConfirmationMsg( $data, $conf_num, $now )
-	{
-		$reason_lower = $reason_noun = $addr = "";
-		$addr = "";
-		$payment_type = $data["payment_type"];
-		$first_name= $data["first_name"];
-		$last_name = $data["last_name"];
-		$phone = $data["phone"];
-		$phone_type= $data["phone_type"];
-		$email = $data["email"];
-	
-		switch($payment_type)
-		{
-		case 'join': // membership application per Bev 6/2017
-			$reason_lower = "membership application";
-			$reason_noun = "Applicant";
-			break;
-		case 'renew':
-			$reason_lower = "renewal";
-			$reason_noun = "Member";
-			break;
-		case 'donate':
-			$reason_lower = "donation";
-			$reason_noun = "Donor";
-			break;
-		default:
-			jexit('improper reason');
-		}
-		if ( $payment_type != "renew" )
-			$addr = "
-${data['address']}
-${data['city']}, ${data['usastate']} ${data['zipcode']}";
-		
-		$reason_upper = ucwords($reason_lower);
-		
-		if ( $payment_type == "donate" )
-			$info = "Fund: ${data['payment_reason']}
-Amount: \$${data['amount']}";
-		else
-		{
-			$arr = explode('|',$data["payment_reason"]);
-			$typ = $arr[0];
-			$len = $arr[2];
-			$s = $len > 1 ? "s" : "";
-			$dues = '$' . $data["amount"];
-			
-			$info = "Type: $typ
-Length: $len Year$s
-Dues: $dues";
-		}
-		$msg = "Thank you for your $reason_lower!
-		
-Your $reason_lower has been recorded as of $now with confirmation # $conf_num.
-		
-$reason_noun Information:
-		
-$first_name $last_name";
-		$msg .= $addr;
-		$msg .= "
-$phone ($phone_type)
-$email
-		
-";
-if ( $payment_type == 'join' )
-	$msg .= "Membership applied for:
 
-$info
-
-We will process your application as soon as possible and then send your confirmation email with more details.
-
-Thank you!
-";
-else 
-	$msg .= "$reason_upper Information:
-
-$info
-";
-		return $msg;
-	}
-	public function onCompleted( $data, $conf_num, $now )
-	{
-		/*
-donation:Array ( [first_name] => Ted [last_name] => Lowe [address] => 2003 Paddock Ct [city] => Wheaton [usastate] => IL [zipcode] => 60187 [phone] => 630-260-0424 [phone_type] => Cell [email] => lists@creativespirits.org [payment_reason] => Annual Fund (matched) [amount] => 1 [otheramount] => 1 [payment_type] => donate [card_first_name] => Ted [card_last_name] => Lowe [cardno] => 4111111111111112 [cardexpmonth] => 09 [cardexpyear] => 2016 [cardccv] => 123 )
-join:Array ( [first_name] => Ted [last_name] => Lowe [address] => 2003 Paddock Ct [city] => Wheaton [usastate] => IL [zipcode] => 60187 [phone] => 630-260-0424 [phone_type] => Cell [email] => lists@creativespirits.org [birthdate] => 1957-11-06 [gender] => Male [lang_pref] => English [payment_reason] => Single Person|60|1|0|0 [source] => Web Browsing [amount] => 60 [payment_type] => join [card_first_name] => Ted [card_last_name] => Lowe [cardno] => 4111111111111112 [cardexpmonth] => 01 [cardexpyear] => 2032 [cardccv] => 123 )
-renew:Array ( [first_name] => Ted [last_name] => Lowe [phone] => 630-260-0424 [phone_type] => Cell [email] => lists@creativespirits.org [payment_reason] => Single Person|60|1|0|0 [amount] => 60 [payment_type] => renew [card_first_name] => Ted [card_last_name] => Lowe [cardno] => 4111111111111112 [cardexpmonth] => 12 [cardexpyear] => 2032 [cardccv] => 123 )
-
-		 */
-	
-		$to = $data["email"];
-		$name = $data["first_name"] . " " . $data["last_name"];
-		
-		// prepare the email From: line
-		$org_rep = JComponentHelper::getParams('com_cs_payments')->get('org_membership_email_address');
-		$org_abbr = JComponentHelper::getParams('com_cs_payments')->get('org_name_abbr');
-		$org_dept = $type == "donate" ? "Donation" : "Membership";
-		$from = sprintf( "%s %s <%s>", $org_abbr, $org_dept, $org_rep );
-		$addhdrs = "From: " . $from . "\r\n";
-		
-		// prepare the email Subject: line
-		$type = $data["payment_type"];
-		$subjtype = $type == "join" ? "Membership" : (($type == "renew") ? "Renewal" : "Donation");
-		$subj = "$subjtype Confirmation for $name";
-		
-		//$person_info = getPersonInfo( $data, "\n" );
-		//$what_info = getWhatInfo( $data, "\n" );
-
-		$msg = $this->getConfirmationMsg( $data, $conf_num, $now );
-
-		// if sending email to person, bcc org, else just email org
-	
-		if ( ! empty( $to ) )
-		{
-			$addhdrs .= "Bcc: " . $org_rep . "\r\n";
-		}
-		else
-		{
-			$to = $org_rep;
-		}
-	
-		mail( $to, $subj, $msg, $addhdrs );
-		
-		//todos: check mail() return status???
-	}
 
 /**
  * Method to confirm information was added properly (server-side validation).
@@ -656,7 +560,7 @@ public function confirminfo()
 	else
 	{
 		// join/renew
-		$arr = explode('|',$data["payment_reason"]);	// Individual|60|0|0
+		$arr = explode('|',$data["payment_reason"]);	// Individual|60|1|0|0
 		$data["amount"] = $arr[1];
 	}
 
@@ -696,3 +600,4 @@ public function confirminfo()
 	return true;
 } 
 }
+?>
