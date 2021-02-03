@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="component" version="3.0" method="upgrade">
     <name>com_cs_payments</name>
-    <creationDate>2020-01-07</creationDate>
+    <creationDate>2021-02-03</creationDate>
     <theCreationDate>2013-12-09</theCreationDate>
     <copyright>Copyright (C) Creative Spirits 2020. All rights reserved.</copyright>
     <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
