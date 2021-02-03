@@ -28,14 +28,29 @@ class Cs_paymentsPayprocActionEnter_Payment extends Cs_paymentsPayprocAction
 		 
 		if ($data->memid==0)
 		{
+			// 2021-02-02 - 1.0.5 fixes
+			// 1. for renewals, ignore Duplicate to only pickup one email address
+			// 2. for joins accidentally sent as renewals, make sure exactly 1 email address is found
+			
 			// find member by email address - todo: assumption: each member should have a unique email address
-			$sql = "SELECT id,email FROM #__cs_members WHERE email='".$data->email."'";
+			$sql = "SELECT id,email,status FROM #__cs_members WHERE email='".$data->email."' AND status != 'Duplicate'";
 			$db = JFactory::getDBO();
 			$db->setQuery($sql);
 			$rows = $db->loadAssocList();
 			if ( $rows === null)
 				return false;
 			
+			// 1.0.5 false renewal - will not find any existing member by email address
+			
+			if ( count( $rows ) == 0 )
+			{
+				JFactory::getApplication()->enqueueMessage("Processing payment #" . $this->id . ", no member found with email ".$data->email, 'warning');
+			
+				return false;
+			}
+
+			// must find exactly one member by email address
+
 			if ( ($nmembers = count( $rows )) > 1 )
 			{
 				JFactory::getApplication()->enqueueMessage("Processing payment #" . $this->id . ", $nmembers members with email ".$data->email, 'warning');
@@ -51,6 +66,8 @@ class Cs_paymentsPayprocActionEnter_Payment extends Cs_paymentsPayprocAction
 			$res = JFactory::getDbo()->updateObject("#__cs_payments", $obj, 'id');
 		}
 	
+		// show the "Enter Payment" action for this record
+
 		return "Enter this payment now in the CRM app?";
 	}
 	public function executeAction()
